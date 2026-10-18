@@ -112,6 +112,38 @@ The Apple-sanctioned path on iPhone is a **custom keyboard extension** — you'd
 switch to a "Murti" keyboard and tap a mic button inside it. That's a separate
 native iOS build (Swift), on the roadmap, not in this repo.
 
+### Prefer to double-click instead of the terminal? Build an app bundle
+
+Once set up, you can wrap Murti into a real **`Murti.app`** you launch from
+Finder or the Dock — no terminal, with its own icon:
+
+```sh
+scripts/build_app.sh          # builds dist/Murti.app (via py2app)
+open dist/Murti.app           # …or just double-click it in Finder
+```
+
+This build is **ad-hoc code-signed and de-quarantined**, so it launches on
+*your* Mac with no Gatekeeper warning. It's an *alias* build — small and
+instant, but tied to this machine (it references your `.venv`).
+
+**To hand Murti to someone else's Mac**, you need a self-contained, **notarized**
+bundle. That requires a paid **Apple Developer account** and a *Developer ID
+Application* certificate (nothing else can satisfy Gatekeeper on another
+machine). With the cert in your keychain:
+
+```sh
+scripts/build_app.sh standalone   # self-contained bundle (large)
+# store a notary credential once (app-specific password from appleid.apple.com):
+xcrun notarytool store-credentials murti-notary \
+  --apple-id "you@example.com" --team-id "TEAMID" --password "xxxx-xxxx-xxxx-xxxx"
+scripts/sign_notarize.sh          # Developer-ID sign → notarize → staple
+```
+
+`scripts/sign_notarize.sh` auto-detects your certificate and tells you exactly
+what's missing if the account/cert/Xcode aren't in place yet. (The standalone
+freeze of the on-device ML stack is large and may need per-dependency tuning —
+do it when you're actually ready to distribute.)
+
 ## Using Murti — start, stop, and post your words
 
 **One shortcut toggles dictation — `⌘ ⌥ D` by default.** Press once to **start**,

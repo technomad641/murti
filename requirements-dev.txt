@@ -1,0 +1,5 @@
+# Build-time only — needed to package Murti.app, not to run Murti.
+# Install with:  uv pip install --python .venv/bin/python -r requirements-dev.txt
+py2app==0.28.8
+setuptools<81   # py2app still imports pkg_resources
+wheel

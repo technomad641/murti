@@ -6,6 +6,8 @@ __pycache__/
 .DS_Store
 # user-specific app bundle (hardcoded paths; build locally)
 dist/
+# py2app intermediate build dir
+build/
 # local dictation demo cache
 demo/transcripts.json
 demo/report.html
