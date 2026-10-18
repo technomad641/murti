@@ -10,6 +10,7 @@ Plus a studio tool that reads any app you own and reveals the form hidden inside
 
 <img src="demo/murti-hero.svg" alt="Murti — an app being x-rayed into its architecture" width="100%">
 
+[![website](https://img.shields.io/badge/website-murti-8b7cf5)](https://technomad641.github.io/murti/)
 [![brew install technomad641/murti/murti](https://img.shields.io/badge/brew-technomad641%2Fmurti-F6A623?logo=homebrew&logoColor=white)](https://github.com/technomad641/homebrew-murti)
 ![macOS · Apple Silicon](https://img.shields.io/badge/macOS-Apple%20Silicon-111111?logo=apple&logoColor=white)
 ![transcription 100% on-device](https://img.shields.io/badge/transcription-100%25%20on--device-3aa675)
