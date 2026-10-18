@@ -1,0 +1,10 @@
+/Users/rajatsingh/dictation-app/.venv/lib/python3.12/site-packages/stanza/models/constituency/parse_transitions.py:322: SyntaxWarning: invalid escape sequence '\T'
+  return "\Tree [.%s ? ]" % self.label
+2026-10-11 03:26:11 WARNING: Language en package default expects mwt, which has been added
+updating package index...
+candidate packages: [('en', 'hi'), ('hi', 'en')]
+installing en -> hi
+installing hi -> en
+installed languages: ['en', 'hi']
+TEST en->hi: कृपया मुझे कल तक रिपोर्ट भेजें।
+TEST hi->en: I have to send the report till tomorrow.

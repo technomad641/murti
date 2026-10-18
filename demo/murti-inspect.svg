@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="554" viewBox="0 0 900 554" font-family="'SF Mono','DejaVu Sans Mono',Menlo,Consolas,monospace" font-size="15">
+<style>
+text{dominant-baseline:middle}.cur{animation:blink 1s steps(1) infinite}@keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+.l0{opacity:1;animation:k0 11.0s infinite;}@keyframes k0{0%,2.73%{opacity:0}5.91%,94%{opacity:1}100%{opacity:0}}.l1{opacity:1;animation:k1 11.0s infinite;}@keyframes k1{0%,10.00%{opacity:0}13.18%,94%{opacity:1}100%{opacity:0}}.l2{opacity:1;animation:k2 11.0s infinite;}@keyframes k2{0%,15.45%{opacity:0}18.64%,94%{opacity:1}100%{opacity:0}}.l3{opacity:1;animation:k3 11.0s infinite;}@keyframes k3{0%,22.73%{opacity:0}25.91%,94%{opacity:1}100%{opacity:0}}.l4{opacity:1;animation:k4 11.0s infinite;}@keyframes k4{0%,29.09%{opacity:0}32.27%,94%{opacity:1}100%{opacity:0}}.l5{opacity:1;animation:k5 11.0s infinite;}@keyframes k5{0%,30.91%{opacity:0}34.09%,94%{opacity:1}100%{opacity:0}}.l6{opacity:1;animation:k6 11.0s infinite;}@keyframes k6{0%,34.55%{opacity:0}37.73%,94%{opacity:1}100%{opacity:0}}.l7{opacity:1;animation:k7 11.0s infinite;}@keyframes k7{0%,38.18%{opacity:0}41.36%,94%{opacity:1}100%{opacity:0}}.l8{opacity:1;animation:k8 11.0s infinite;}@keyframes k8{0%,40.91%{opacity:0}44.09%,94%{opacity:1}100%{opacity:0}}.l9{opacity:1;animation:k9 11.0s infinite;}@keyframes k9{0%,43.64%{opacity:0}46.82%,94%{opacity:1}100%{opacity:0}}.l10{opacity:1;animation:k10 11.0s infinite;}@keyframes k10{0%,46.36%{opacity:0}49.55%,94%{opacity:1}100%{opacity:0}}.l11{opacity:1;animation:k11 11.0s infinite;}@keyframes k11{0%,49.09%{opacity:0}52.27%,94%{opacity:1}100%{opacity:0}}.l12{opacity:1;animation:k12 11.0s infinite;}@keyframes k12{0%,51.82%{opacity:0}55.00%,94%{opacity:1}100%{opacity:0}}.l13{opacity:1;animation:k13 11.0s infinite;}@keyframes k13{0%,57.27%{opacity:0}60.45%,94%{opacity:1}100%{opacity:0}}.l14{opacity:1;animation:k14 11.0s infinite;}@keyframes k14{0%,62.73%{opacity:0}65.91%,94%{opacity:1}100%{opacity:0}}.l15{opacity:1;animation:k15 11.0s infinite;}@keyframes k15{0%,66.36%{opacity:0}69.55%,94%{opacity:1}100%{opacity:0}}.l16{opacity:1;animation:k16 11.0s infinite;}@keyframes k16{0%,72.73%{opacity:0}75.91%,94%{opacity:1}100%{opacity:0}}.l17{opacity:1;animation:k17 11.0s infinite;}@keyframes k17{0%,74.55%{opacity:0}77.73%,94%{opacity:1}100%{opacity:0}}
+</style>
+<rect width="900" height="554" rx="12" fill="#0e0d0c"/>
+<rect width="900" height="40" rx="12" fill="#1d1a18"/>
+<rect y="28" width="900" height="12" fill="#1d1a18"/>
+<circle cx="24" cy="20" r="5.5" fill="none" stroke="#746b5f" stroke-width="1.3"/>
+<circle cx="43" cy="20" r="5.5" fill="none" stroke="#746b5f" stroke-width="1.3"/>
+<circle cx="62" cy="20" r="5.5" fill="none" stroke="#746b5f" stroke-width="1.3"/>
+<text x="450.0" y="20" fill="#746b5f" font-size="13" text-anchor="middle">murti — zsh</text>
+<text class="l0" x="26" y="78" fill="#c08a5a" xml:space="preserve">$ murti inspect &quot;/Applications/Wispr Flow.app&quot;</text>
+<text class="l1" x="26" y="103" fill="#746b5f" xml:space="preserve">  • target: app.asar   (electron bundle, 134 MB)</text>
+<text class="l2" x="26" y="128" fill="#746b5f" xml:space="preserve">  • running REA:  rea inspect-artifact …</text>
+<text class="l3" x="26" y="153" fill="#a69d8f" xml:space="preserve">  ✓ 999 files mapped from the raw binary — no source</text>
+<text class="l4" x="26" y="178" fill="#efe9e0" xml:space="preserve"> </text>
+<text class="l5" x="26" y="203" fill="#c08a5a" xml:space="preserve">  # Architecture X-ray — Wispr Flow</text>
+<text class="l6" x="26" y="228" fill="#746b5f" xml:space="preserve">    Electron · webpack · v1.6.1147</text>
+<text class="l7" x="26" y="253" fill="#efe9e0" xml:space="preserve">    ├─ node_sqlite3.node        → local database</text>
+<text class="l8" x="26" y="278" fill="#efe9e0" xml:space="preserve">    ├─ opusscript_native.wasm   → Opus audio codec</text>
+<text class="l9" x="26" y="303" fill="#efe9e0" xml:space="preserve">    ├─ panel_activation.node    → global hotkey</text>
+<text class="l10" x="26" y="328" fill="#efe9e0" xml:space="preserve">    ├─ recorderWorklet.js       → microphone capture</text>
+<text class="l11" x="26" y="353" fill="#efe9e0" xml:space="preserve">    ├─ accessibility_drop/      → AX text insertion</text>
+<text class="l12" x="26" y="378" fill="#efe9e0" xml:space="preserve">    └─ @grpc/grpc-js            → cloud backend</text>
+<text class="l13" x="26" y="403" fill="#c08a5a" xml:space="preserve">    ⚑ no on-device model  →  transcription is cloud</text>
+<text class="l14" x="26" y="428" fill="#746b5f" xml:space="preserve">    9 renderer windows · 3 integrity flags</text>
+<text class="l15" x="26" y="453" fill="#a69d8f" xml:space="preserve">    → next probe: analyze-javascript-application</text>
+<text class="l16" x="26" y="478" fill="#efe9e0" xml:space="preserve"> </text>
+<text class="l17" x="26" y="503" fill="#c08a5a" xml:space="preserve">  one command. zero source code. full blueprint.</text>
+<rect class="cur l17" x="466" y="494" width="9" height="18" fill="#c08a5a"/>
+</svg>

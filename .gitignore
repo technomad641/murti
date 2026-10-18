@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+# macOS
+.DS_Store
+# user-specific app bundle (hardcoded paths; build locally)
+dist/
+# local dictation demo cache
+demo/transcripts.json
+demo/report.html
+demo/*.wav
+demo/*.log

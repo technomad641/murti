@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Murti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ── design system (web-design-engineer) ───────────────────────
+     Type: Instrument Serif (display) + Hanken Grotesk (UI)
+     Palette (4): paper, ink, slate accent, warm surface (grays via opacity)
+     Spacing: 8pt · Radius: 10 · Motion: CSS only                   */
+  :root{
+    --paper:#efe9dd; --surface:#f7f2e8; --surface-2:#ece5d6; --sidebar:#eae3d5;
+    --ink:#211f1a;
+    --ink-70:rgba(33,31,26,.72); --ink-50:rgba(33,31,26,.52);
+    --ink-34:rgba(33,31,26,.40); --ink-14:rgba(33,31,26,.15);
+    --line:rgba(33,31,26,.10); --line-2:rgba(33,31,26,.18);
+    --accent:#3f5b66; --accent-2:#4c6d79; --accent-wash:rgba(63,91,102,.11);
+    --r:10px; --r-sm:7px; --sp:8px;
+    --serif:'Instrument Serif',Georgia,serif;
+    --ui:'Hanken Grotesk',-apple-system,system-ui,sans-serif;
+    --e1:0 1px 2px rgba(33,31,26,.05);
+    --e2:0 12px 34px rgba(33,31,26,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--ui);background:var(--paper);color:var(--ink);
+    font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased;font-weight:400}
+  ::selection{background:var(--accent);color:var(--paper)}
+  .app{display:grid;grid-template-rows:38px 1fr;height:100vh;overflow:hidden}
+
+  .titlebar{display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--surface);
+    border-bottom:1px solid var(--line);user-select:none}
+  .lights{display:flex;gap:9px}
+  .lights i{width:11px;height:11px;border-radius:50%;border:1px solid var(--line-2)}
+  .tb-title{flex:1;text-align:center;font-size:11.5px;color:var(--ink-34);
+    letter-spacing:.22em;text-transform:uppercase}
+
+  .shell{display:grid;grid-template-columns:248px 1fr;min-height:0}
+
+  .sidebar{background:var(--sidebar);border-right:1px solid var(--line);padding:24px 14px;overflow-y:auto}
+  .brand{padding:4px 10px 20px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+  .brand .word{font-family:var(--serif);font-size:32px;line-height:1;letter-spacing:.005em}
+  .brand .word em{font-style:normal;color:var(--accent);font-size:17px;margin-left:5px}
+  .brand .tag{font-size:10px;color:var(--ink-34);letter-spacing:.26em;text-transform:uppercase;margin-top:11px}
+  .grp{font-size:10px;color:var(--ink-34);letter-spacing:.24em;padding:22px 10px 8px;font-weight:500}
+  .nav{display:flex;align-items:center;gap:12px;width:100%;padding:8px 10px;border-radius:var(--r-sm);
+    color:var(--ink-70);background:none;border:0;font:inherit;font-size:14.5px;cursor:pointer;
+    text-align:left;transition:color .15s,background .15s}
+  .nav svg{width:16px;height:16px;flex:none;stroke:var(--ink-34);stroke-width:1.5;fill:none;transition:stroke .15s}
+  .nav:hover{color:var(--ink);background:rgba(33,31,26,.04)}
+  .nav:hover svg{stroke:var(--ink-70)}
+  .nav.active{color:var(--accent);background:var(--accent-wash)}
+  .nav.active svg{stroke:var(--accent)}
+  .nav .count{margin-left:auto;font-size:11px;color:var(--accent)}
+
+  .content{overflow-y:auto;padding:clamp(40px,5vw,60px) clamp(32px,5vw,64px) 80px;max-width:940px}
+  .view{display:none}.view.active{display:block}
+  @media (prefers-reduced-motion:no-preference){
+    .view.enter{animation:rise .3s cubic-bezier(.2,.7,.3,1)}
+    @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  }
+  .eyebrow{font-size:11px;color:var(--accent);letter-spacing:.24em;text-transform:uppercase;
+    margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  .eyebrow::after{content:"";height:1px;flex:1;background:var(--line);max-width:200px}
+  h1{font-family:var(--serif);font-size:clamp(34px,4.4vw,46px);font-weight:400;line-height:1.02;
+    letter-spacing:.004em;margin-bottom:14px;text-wrap:pretty}
+  .sub{color:var(--ink-50);margin-bottom:40px;font-size:16px;max-width:58ch;line-height:1.6}
+  h2{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.2em;color:var(--ink-34);margin:44px 0 16px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--e1)}
+  .rows .row{display:flex;align-items:center;gap:20px;padding:18px 22px;border-top:1px solid var(--line)}
+  .rows .row:first-child{border-top:0}
+  .row .tx{flex:1;min-width:0}
+  .row .tx b{font-weight:500;font-size:15.5px;display:block}
+  .row .tx span{color:var(--ink-50);font-size:13.5px;margin-top:3px;display:block;line-height:1.45}
+  .row .val{color:var(--ink-50);font-size:14px;white-space:nowrap}
+  .row .val.on{color:var(--accent);font-weight:500}
+
+  .sw{width:44px;height:25px;border-radius:30px;background:var(--ink-14);position:relative;cursor:pointer;
+    flex:none;transition:background .2s;border:none}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .2s}
+  .sw.on{background:var(--accent)}.sw.on::after{transform:translateX(19px)}
+
+  .btn{font-family:var(--ui);font-size:14px;font-weight:500;color:var(--ink);background:transparent;
+    border:1px solid var(--line-2);border-radius:var(--r-sm);padding:9px 17px;cursor:pointer;
+    transition:border-color .15s,background .15s;white-space:nowrap}
+  .btn:hover{border-color:var(--ink-34);background:rgba(33,31,26,.03)}
+  .btn.pri{background:var(--accent);color:var(--paper);border-color:var(--accent);font-weight:600}
+  .btn.pri:hover{background:var(--accent-2)}
+  .btn.block{width:100%;padding:12px;text-align:center}
+
+  .hero{display:flex;align-items:center;gap:26px;padding:30px 28px}
+  .orb{width:72px;height:72px;border-radius:50%;flex:none;display:grid;place-items:center;
+    border:1px solid var(--accent);position:relative}
+  .orb::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid var(--accent-wash)}
+  .orb svg{width:28px;height:28px;stroke:var(--accent);stroke-width:1.5;fill:none}
+  .hero .meta h3{font-family:var(--serif);font-size:24px;font-weight:400;line-height:1.1}
+  .hero .meta p{color:var(--ink-50);font-size:14px;margin-top:6px}
+  .kbd{font-family:var(--ui);font-size:12px;color:var(--ink-70);border:1px solid var(--line-2);
+    border-radius:5px;padding:2px 7px;letter-spacing:.04em}
+
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp)}
+  .tiles.three{grid-template-columns:repeat(3,1fr)}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;box-shadow:var(--e1)}
+  .tile .n{font-family:var(--serif);font-size:38px;font-weight:400;line-height:1;letter-spacing:.01em}
+  .tile .l{color:var(--ink-50);font-size:13px;margin-top:10px}
+
+  .bars{display:flex;align-items:flex-end;gap:7px;height:116px;padding:22px}
+  .bars i{flex:1;background:var(--accent);opacity:.72;border-radius:2px 2px 0 0;display:block;transition:opacity .15s}
+  .bars:hover i{opacity:.4}.bars i:hover{opacity:1}
+
+  .mtg{display:flex;align-items:center;gap:18px;padding:16px 22px;border-top:1px solid var(--line)}
+  .mtg:first-child{border-top:0}
+  .mtg .dt{width:44px;text-align:center;flex:none}
+  .mtg .dt b{font-family:var(--serif);font-size:24px;display:block;line-height:1}
+  .mtg .dt span{font-size:10px;color:var(--ink-34);letter-spacing:.12em}
+  .mtg .info{flex:1}.mtg .info b{font-weight:500}.mtg .info span{display:block;color:var(--ink-50);font-size:13px;margin-top:2px}
+  .tag-pill{font-size:11px;padding:4px 11px;border-radius:30px;border:1px solid var(--line-2);color:var(--ink-50);letter-spacing:.03em}
+  .tag-pill.live{border-color:var(--accent);color:var(--accent)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:9px;padding:22px}
+  .chip{border:1px solid var(--line-2);border-radius:30px;padding:7px 15px;font-size:13.5px;color:var(--ink-70)}
+  .chip small{color:var(--ink-34);margin-left:5px}
+  .chip.add{border-style:dashed;cursor:pointer}
+
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp)}
+  .plan{border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;background:var(--surface)}
+  .plan.cur{border-color:var(--accent);box-shadow:var(--e2)}
+  .plan h3{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--ink-50);font-weight:500}
+  .plan .price{font-family:var(--serif);font-size:42px;font-weight:400;margin:14px 0;line-height:1}
+  .plan .price small{font-size:14px;color:var(--ink-50);font-family:var(--ui)}
+  .plan ul{list-style:none;margin:16px 0 20px;color:var(--ink-50);font-size:13.5px}
+  .plan li{padding:6px 0;border-top:1px solid var(--line)}.plan li:first-child{border-top:0}
+
+  .avatar{width:40px;height:40px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;
+    font-family:var(--serif);font-size:18px;color:var(--accent);flex:none;border:1px solid var(--line-2)}
+  .note{font-size:12.5px;color:var(--ink-34);margin-top:16px;font-style:italic}
+  .livedot{display:none;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:middle}
+  body[data-live="1"] .livedot{display:inline-block}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="titlebar">
+    <div class="lights"><i></i><i></i><i></i></div>
+    <div class="tb-title">Murti</div>
+    <div style="width:44px"></div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="word">Murti<em>मूर्ति</em></div>
+        <div class="tag">Voice, given form<span class="livedot" title="Connected to the Murti engine"></span></div>
+      </div>
+
+      <div class="grp">FLOW</div>
+      <button class="nav active" data-nav="dictation"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Dictation</button>
+      <button class="nav" data-nav="meetings"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Meetings<span class="count">2</span></button>
+      <button class="nav" data-nav="insights"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Insights</button>
+      <button class="nav" data-nav="inspect"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Inspect</button>
+
+      <div class="grp">YOU</div>
+      <button class="nav" data-nav="profile"><svg viewBox="0 0 24 24"><path d="M4 18c0-3 3.5-5 8-5s8 2 8 5M4 7l2 2M20 7l-2 2"/><circle cx="12" cy="8" r="1"/></svg>Voice Profile</button>
+      <button class="nav" data-nav="dictionary"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 20a3 3 0 0 1 3-3h8"/></svg>Dictionary</button>
+      <button class="nav" data-nav="devices"><svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="7" rx="2"/><rect x="17" y="13" width="4" height="7" rx="2"/></svg>Devices</button>
+
+      <div class="grp">ACCOUNT</div>
+      <button class="nav" data-nav="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Account</button>
+      <button class="nav" data-nav="team"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 19c0-2 1.5-3.5 4-3.5"/></svg>Team</button>
+      <button class="nav" data-nav="billing"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Billing</button>
+      <button class="nav" data-nav="sync"><svg viewBox="0 0 24 24"><path d="M6 16a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1.5A4 4 0 0 1 17 16z"/></svg>Cloud Sync</button>
+    </aside>
+
+    <main class="content">
+
+      <section class="view active" data-view="dictation">
+        <div class="eyebrow">Flow</div>
+        <h1>Dictation</h1>
+        <p class="sub">Press your hotkey anywhere, speak, and Murti carves your raw voice into finished text — entirely on your device.</p>
+        <div class="card">
+          <div class="hero">
+            <div class="orb"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+            <div class="meta"><h3>Ready to dictate</h3><p>Press <span class="kbd">⌘ ⌥ D</span> &nbsp;·&nbsp; English · Hindi · Hinglish &nbsp;·&nbsp; on-device</p></div>
+          </div>
+        </div>
+        <h2>While dictating</h2>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Pause media</b><span>Pause Music, Spotify or video when you start speaking; resume after</span></div><button class="sw on" data-sw data-key="pause_media"></button></div>
+          <div class="row"><div class="tx"><b>Mute other audio</b><span>Duck system output so nothing bleeds into your microphone</span></div><button class="sw" data-sw data-key="mute_others"></button></div>
+          <div class="row"><div class="tx"><b>Auto-learn vocabulary</b><span>Add the names and jargon you dictate to your personal dictionary</span></div><button class="sw on" data-sw data-key="auto_learn"></button></div>
+        </div>
+        <h2>Output</h2>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Translate</b><span>Translate the result into a target language</span></div><button class="sw" data-sw data-key="translate_enabled"></button></div>
+          <div class="row"><div class="tx"><b>Romanized Hindi</b><span>Write Hindi as Hinglish — “mujhe kal office jaana hai”</span></div><button class="sw on" data-sw data-key="hindi_script"></button></div>
+          <div class="row"><div class="tx"><b>Online polish</b><span>Tidy punctuation and spelling when connected</span></div><button class="sw on" data-sw data-key="online_cleanup"></button></div>
+        </div>
+      </section>
+
+      <section class="view" data-view="meetings">
+        <div class="eyebrow">Flow</div>
+        <h1>Meetings</h1>
+        <p class="sub">A notetaker that joins your calls, transcribes them, and writes the summary.</p>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Zoom</b><span>Auto-join and record your Zoom meetings</span></div><button class="btn">Connect</button></div>
+          <div class="row"><div class="tx"><b>Google Meet</b><span>Calendar-based auto-join</span></div><button class="btn">Connect</button></div>
+        </div>
+        <h2>Recent notes</h2>
+        <div class="card">
+          <div class="mtg"><div class="dt"><b>17</b><span>OCT</span></div><div class="info"><b>Design sync</b><span>24 min · 4 people · summary + 6 action items</span></div><span class="tag-pill">Zoom</span></div>
+          <div class="mtg"><div class="dt"><b>16</b><span>OCT</span></div><div class="info"><b>1:1 with manager</b><span>31 min · 2 people · summary ready</span></div><span class="tag-pill">Meet</span></div>
+          <div class="mtg"><div class="dt"><b>—</b><span>NOW</span></div><div class="info"><b>Standup</b><span>Recording in progress…</span></div><span class="tag-pill live">● Live</span></div>
+        </div>
+        <p class="note">Notetaker and Zoom join run in the cloud and need an account — shown here as a preview.</p>
+      </section>
+
+      <section class="view" data-view="insights">
+        <div class="eyebrow">Flow</div>
+        <h1>Insights</h1>
+        <p class="sub">Your dictation, measured — all computed on your device.</p>
+        <div class="tiles">
+          <div class="tile"><div class="n" data-live="total_words">48,210</div><div class="l">Words dictated</div></div>
+          <div class="tile"><div class="n" data-live="wpm">119</div><div class="l">Words per minute</div></div>
+          <div class="tile"><div class="n" data-live="time_saved">6.4h</div><div class="l">Time saved</div></div>
+          <div class="tile"><div class="n" data-live="streak">12</div><div class="l">Day streak</div></div>
+        </div>
+        <h2>Words per day — last 14 days</h2>
+        <div class="card bars" id="bars"></div>
+        <h2>Most used words</h2>
+        <div class="card chips" id="topwords">
+          <span class="chip">the<small>1,204</small></span><span class="chip">meeting<small>318</small></span>
+          <span class="chip">project<small>276</small></span><span class="chip">tomorrow<small>201</small></span>
+          <span class="chip">kal<small>188</small></span><span class="chip">please<small>164</small></span>
+        </div>
+      </section>
+
+      <section class="view" data-view="inspect">
+        <div class="eyebrow">Studio</div>
+        <h1>Inspect</h1>
+        <p class="sub">Murti can read any app you own and reveal the form hidden inside it — frameworks, native modules, windows and backend — straight from the shipped binary. No source code.</p>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Inspect an app</b><span>Drop in a .app or .asar and get an architecture report</span></div><button class="btn pri">Choose app…</button></div>
+        </div>
+        <h2>Last report — Wispr Flow</h2>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Stack</b><span>Electron · webpack · v1.6.1147</span></div><div class="val">999 files</div></div>
+          <div class="row"><div class="tx"><b>node_sqlite3.node</b><span>Local database</span></div><div class="val on">native</div></div>
+          <div class="row"><div class="tx"><b>Opus · AudioWorklet</b><span>Microphone capture pipeline</span></div><div class="val on">native</div></div>
+          <div class="row"><div class="tx"><b>gRPC → cloud</b><span>No on-device speech model found</span></div><div class="val">cloud STT</div></div>
+        </div>
+        <p class="note">Powered by the REA reverse-engineering engine. Structural metadata only — no source or secrets.</p>
+      </section>
+
+      <section class="view" data-view="profile">
+        <div class="eyebrow">You</div>
+        <h1>Voice Profile</h1>
+        <p class="sub">Murti adapts to how <em style="font-style:italic;font-family:var(--serif)">you</em> speak — accent, pace and vocabulary.</p>
+        <div class="tiles three">
+          <div class="tile"><div class="n">97%</div><div class="l">Recognition accuracy</div></div>
+          <div class="tile"><div class="n">Strong</div><div class="l">Adaptation</div></div>
+          <div class="tile"><div class="n">EN · HI</div><div class="l">Languages</div></div>
+        </div>
+        <h2>Profile</h2>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Accent model</b><span>Indian English with Hindi code-switch</span></div><div class="val on">Active</div></div>
+          <div class="row"><div class="tx"><b>Speaking pace</b><span>Learned from your sessions</span></div><div class="val" data-live="wpm2">119 wpm</div></div>
+          <div class="row"><div class="tx"><b>Custom terms learned</b><span>From your dictionary and corrections</span></div><div class="val" data-live="terms">84</div></div>
+          <div class="row"><div class="tx"><b>Retrain profile</b><span>Rebuild from your recent dictations</span></div><button class="btn">Retrain</button></div>
+        </div>
+      </section>
+
+      <section class="view" data-view="dictionary">
+        <div class="eyebrow">You</div>
+        <h1>Dictionary</h1>
+        <p class="sub">Names, jargon and brand spellings Murti should always carve correctly.</p>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Auto-learn new words</b><span>Add unfamiliar terms you dictate automatically</span></div><button class="sw on" data-sw data-key="auto_learn"></button></div>
+        </div>
+        <h2>Learned &amp; custom words</h2>
+        <div class="card chips" id="dict-chips">
+          <span class="chip">Rajat</span><span class="chip">Anthropic</span><span class="chip">Hinglish</span>
+          <span class="chip">Kubernetes</span><span class="chip">Murti</span><span class="chip">asana</span>
+          <span class="chip">OKR</span><span class="chip">Figma</span><span class="chip add" id="addword">+ Add word</span>
+        </div>
+      </section>
+
+      <section class="view" data-view="devices">
+        <div class="eyebrow">You</div>
+        <h1>Devices</h1>
+        <p class="sub">Pick your microphone. Murti detects headsets and call rings automatically.</p>
+        <div class="card rows" id="devlist">
+          <div class="row"><div class="tx"><b>Jabra Evolve2 65</b><span>Bluetooth headset · call-control ring supported</span></div><div class="val on">Connected</div></div>
+          <div class="row"><div class="tx"><b>MacBook Pro Microphone</b><span>Built-in</span></div><div class="val">Available</div></div>
+          <div class="row"><div class="tx"><b>Prefer headset when connected</b><span>Switch to your headset automatically</span></div><button class="sw on" data-sw data-key="prefer_headset"></button></div>
+        </div>
+      </section>
+
+      <section class="view" data-view="account">
+        <div class="eyebrow">Account</div>
+        <h1>Account</h1>
+        <p class="sub">Signed in. Your settings and dictionary sync across devices.</p>
+        <div class="card rows">
+          <div class="row"><div class="avatar">R</div><div class="tx"><b>Rajat Singh</b><span>rajat@example.com · Atelier plan</span></div><button class="btn">Manage</button></div>
+          <div class="row"><div class="tx"><b>Sign out</b><span>On this Mac</span></div><button class="btn">Sign out</button></div>
+        </div>
+        <p class="note">Accounts run in the cloud — shown here as a preview.</p>
+      </section>
+
+      <section class="view" data-view="team">
+        <div class="eyebrow">Account</div>
+        <h1>Team</h1>
+        <p class="sub">Shared dictionary, billing and meeting notes for your workspace.</p>
+        <div class="card rows">
+          <div class="row"><div class="avatar">R</div><div class="tx"><b>Rajat Singh</b><span>Owner</span></div><div class="val">Admin</div></div>
+          <div class="row"><div class="avatar">A</div><div class="tx"><b>Aditi M.</b><span>aditi@example.com</span></div><div class="val">Member</div></div>
+          <div class="row"><div class="avatar">J</div><div class="tx"><b>John D.</b><span>john@example.com</span></div><div class="val">Member</div></div>
+          <div class="row"><div class="tx"><b>Invite teammates</b><span>Share your workspace dictionary and notes</span></div><button class="btn pri">Invite</button></div>
+        </div>
+        <p class="note">Team workspaces run in the cloud — shown here as a preview.</p>
+      </section>
+
+      <section class="view" data-view="billing">
+        <div class="eyebrow">Account</div>
+        <h1>Billing</h1>
+        <p class="sub">Simple plans. Dictation is always on-device; the cloud features are optional.</p>
+        <div class="plans">
+          <div class="plan"><h3>Studio</h3><div class="price">$0</div>
+            <ul><li>Unlimited on-device dictation</li><li>English · Hindi · Hinglish</li><li>Personal dictionary</li></ul>
+            <button class="btn block">Current</button></div>
+          <div class="plan cur"><h3>Atelier</h3><div class="price">$12<small>/mo</small></div>
+            <ul><li>Everything in Studio</li><li>Meeting notetaker + Zoom</li><li>Cloud sync &amp; insights</li><li>Priority models</li></ul>
+            <button class="btn pri block">Your plan</button></div>
+          <div class="plan"><h3>Guild</h3><div class="price">$10<small>/seat</small></div>
+            <ul><li>Everything in Atelier</li><li>Shared dictionary</li><li>Admin &amp; SSO</li><li>Centralized billing</li></ul>
+            <button class="btn block">Upgrade</button></div>
+        </div>
+        <p class="note">Payments run in the cloud — shown here as a preview.</p>
+      </section>
+
+      <section class="view" data-view="sync">
+        <div class="eyebrow">Account</div>
+        <h1>Cloud Sync</h1>
+        <p class="sub">Keep your dictionary, voice profile and settings in sync.</p>
+        <div class="card rows">
+          <div class="row"><div class="tx"><b>Enable cloud sync</b><span>End-to-end encrypted · last synced 2 minutes ago</span></div><button class="sw on" data-sw data-key="cloud_sync"></button></div>
+          <div class="row"><div class="tx"><b>Sync dictionary</b><span>custom words</span></div><button class="sw on" data-sw></button></div>
+          <div class="row"><div class="tx"><b>Sync voice profile</b><span>Across your Mac, iPhone and iPad</span></div><button class="sw on" data-sw></button></div>
+          <div class="row"><div class="tx"><b>Sync meeting notes</b><span>Atelier</span></div><button class="sw" data-sw></button></div>
+        </div>
+        <p class="note">Sync runs in the cloud — shown here as a preview.</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  const navs = document.querySelectorAll('.nav');
+  const views = document.querySelectorAll('.view');
+  navs.forEach(n => n.addEventListener('click', () => {
+    const id = n.dataset.nav;
+    navs.forEach(x => x.classList.toggle('active', x === n));
+    views.forEach(v => {
+      const on = v.dataset.view === id;
+      v.classList.toggle('active', on);
+      v.classList.remove('enter');
+      if (on) { void v.offsetWidth; v.classList.add('enter'); }
+    });
+    document.querySelector('.content').scrollTop = 0;
+  }));
+
+  // default bars (overwritten by live per-day data when available)
+  const fallbackBars = [58,40,76,52,88,69,45,82,63,95,55,72,86,60];
+  function renderBars(vals){
+    const max = Math.max(1, ...vals);
+    document.getElementById('bars').innerHTML =
+      vals.map(v => `<i style="height:${Math.max(6, v/max*100)}%"></i>`).join('');
+  }
+  renderBars(fallbackBars);
+
+  function setLive(key, val){
+    document.querySelectorAll(`[data-live="${key}"]`).forEach(el => el.textContent = val);
+  }
+
+  // Toggle handler — optimistic UI, persists to the engine when connected
+  let LIVE = false;
+  document.querySelectorAll('[data-sw]').forEach(s => s.addEventListener('click', async () => {
+    s.classList.toggle('on');
+    const key = s.dataset.key;
+    if (!LIVE || !key) return;
+    const on = s.classList.contains('on');
+    const payload = key === 'hindi_script'
+      ? { hindi_script: on ? 'romanized' : 'devanagari' }
+      : { [key]: on };
+    try { await fetch('/api/settings', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)}); }
+    catch (e) {}
+  }));
+
+  // Pull live state from the Murti engine (no-op when opened as a static file)
+  (async function connect(){
+    try{
+      const r = await fetch('/api/state', {cache:'no-store'});
+      if (!r.ok) return;
+      const s = await r.json();
+      LIVE = true; document.body.dataset.live = '1';
+
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const k = el.dataset.key;
+        let v = s.settings[k];
+        if (k === 'hindi_script') v = (v === 'romanized');
+        el.classList.toggle('on', !!v);
+      });
+
+      if (s.insights){
+        setLive('total_words', (s.insights.total_words||0).toLocaleString());
+        setLive('wpm', s.insights.wpm||0);
+        setLive('wpm2', (s.insights.wpm||0) + ' wpm');
+        setLive('time_saved', (s.insights.time_saved_hours||0) + 'h');
+        setLive('streak', s.insights.streak_days||0);
+        const days = Object.keys(s.insights.per_day||{}).sort().slice(-14).map(d => s.insights.per_day[d]);
+        if (days.length) renderBars(days);
+        const tw = s.insights.top_words||[];
+        if (tw.length) document.getElementById('topwords').innerHTML =
+          tw.map(([w,c]) => `<span class="chip">${w}<small>${c.toLocaleString()}</small></span>`).join('');
+      }
+      if (s.dictionary){
+        setLive('terms', s.dictionary.terms.length);
+        const chips = s.dictionary.terms.map(t => `<span class="chip">${t}</span>`).join('')
+          + '<span class="chip add" id="addword">+ Add word</span>';
+        document.getElementById('dict-chips').innerHTML = chips;
+      }
+      if (s.devices && s.devices.length){
+        const pref = document.querySelector('[data-key="prefer_headset"]').closest('.row').outerHTML;
+        document.getElementById('devlist').innerHTML = s.devices.map(d =>
+          `<div class="row"><div class="tx"><b>${d.name}</b><span>${d.headset?'Headset':'Microphone'}${d.default?' · default':''}</span></div>`
+          + `<div class="val${d.default?' on':''}">${d.default?'In use':'Available'}</div></div>`).join('') + pref;
+      }
+    }catch(e){ /* static fallback — sample data stays */ }
+  })();
+</script>
+</body>
+</html>

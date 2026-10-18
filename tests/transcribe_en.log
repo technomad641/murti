@@ -1,0 +1,11 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[1/3] loading model 'large-v3-turbo' (first run downloads weights)...
+      model ready in 60.8s
+[2/3] loading audio /Users/rajatsingh/dictation-app/tests/audio/en.wav ...
+      5.4s of audio
+[3/3] transcribing ...
+------------------------------------------------------------
+detected language : en (p=1.00)
+transcribe time   : 16.8s  (0.3x realtime)
+text              : Please send me the project report by tomorrow morning and schedule a meeting with the design team.
+------------------------------------------------------------
