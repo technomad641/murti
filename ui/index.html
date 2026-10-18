@@ -6,24 +6,24 @@
 <title>Murti</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;450;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;450;500;600&display=swap" rel="stylesheet">
 <style>
   /* ── design system (web-design-engineer) ───────────────────────
      Type: Instrument Serif (display) + Hanken Grotesk (UI)
      Palette (4): paper, ink, slate accent, warm surface (grays via opacity)
      Spacing: 8pt · Radius: 10 · Motion: CSS only                   */
   :root{
-    --paper:#efe9dd; --surface:#f7f2e8; --surface-2:#ece5d6; --sidebar:#eae3d5;
-    --ink:#211f1a;
-    --ink-70:rgba(33,31,26,.72); --ink-50:rgba(33,31,26,.52);
-    --ink-34:rgba(33,31,26,.40); --ink-14:rgba(33,31,26,.15);
-    --line:rgba(33,31,26,.10); --line-2:rgba(33,31,26,.18);
-    --accent:#3f5b66; --accent-2:#4c6d79; --accent-wash:rgba(63,91,102,.11);
-    --r:10px; --r-sm:7px; --sp:8px;
-    --serif:'Instrument Serif',Georgia,serif;
+    --paper:#f5f4f8; --surface:#ffffff; --surface-2:#f1eff8; --sidebar:#f2f0f8;
+    --ink:#18171c;
+    --ink-70:rgba(24,23,28,.70); --ink-50:rgba(24,23,28,.50);
+    --ink-34:rgba(24,23,28,.36); --ink-14:rgba(24,23,28,.12);
+    --line:rgba(24,23,28,.07); --line-2:rgba(24,23,28,.13);
+    --accent:#8b7cf5; --accent-2:#7765ef; --accent-wash:rgba(139,124,245,.13);
+    --r:22px; --r-sm:16px; --r-pill:999px; --sp:8px;
+    --serif:'Newsreader',Georgia,serif;
     --ui:'Hanken Grotesk',-apple-system,system-ui,sans-serif;
-    --e1:0 1px 2px rgba(33,31,26,.05);
-    --e2:0 12px 34px rgba(33,31,26,.10);
+    --e1:0 1px 3px rgba(24,23,28,.05);
+    --e2:0 24px 60px -18px rgba(24,23,28,.22);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
@@ -86,19 +86,19 @@
     background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .2s}
   .sw.on{background:var(--accent)}.sw.on::after{transform:translateX(19px)}
 
-  .btn{font-family:var(--ui);font-size:14px;font-weight:500;color:var(--ink);background:transparent;
-    border:1px solid var(--line-2);border-radius:var(--r-sm);padding:9px 17px;cursor:pointer;
-    transition:border-color .15s,background .15s;white-space:nowrap}
-  .btn:hover{border-color:var(--ink-34);background:rgba(33,31,26,.03)}
-  .btn.pri{background:var(--accent);color:var(--paper);border-color:var(--accent);font-weight:600}
+  .btn{font-family:var(--ui);font-size:14px;font-weight:500;color:var(--ink);background:var(--surface);
+    border:1px solid var(--line-2);border-radius:var(--r-pill);padding:10px 20px;cursor:pointer;
+    transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
+  .btn:hover{border-color:var(--ink-34);background:var(--surface-2)}
+  .btn.pri{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
   .btn.pri:hover{background:var(--accent-2)}
-  .btn.block{width:100%;padding:12px;text-align:center}
+  .btn.block{width:100%;padding:13px;text-align:center}
 
   .hero{display:flex;align-items:center;gap:26px;padding:30px 28px}
-  .orb{width:72px;height:72px;border-radius:50%;flex:none;display:grid;place-items:center;
-    border:1px solid var(--accent);position:relative}
-  .orb::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid var(--accent-wash)}
-  .orb svg{width:28px;height:28px;stroke:var(--accent);stroke-width:1.5;fill:none}
+  .orb{width:78px;height:78px;border-radius:50%;flex:none;display:grid;place-items:center;
+    background:var(--accent-wash);position:relative}
+  .orb::before{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid var(--accent-wash)}
+  .orb svg{width:30px;height:30px;stroke:var(--accent-2);stroke-width:1.6;fill:none}
   .hero .meta h3{font-family:var(--serif);font-size:24px;font-weight:400;line-height:1.1}
   .hero .meta p{color:var(--ink-50);font-size:14px;margin-top:6px}
   .kbd{font-family:var(--ui);font-size:12px;color:var(--ink-70);border:1px solid var(--line-2);
