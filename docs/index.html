@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Murti — voice, given form</title>
+<meta name="description" content="Murti turns your voice into finished text anywhere on your Mac — English, Hindi, and Hinglish — entirely on your device.">
+<meta property="og:title" content="Murti · मूर्ति — voice, given form">
+<meta property="og:description" content="On-device dictation for macOS. English, Hindi, and Hinglish. Nothing leaves your machine.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%238b7cf5'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Georgia,serif' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f5f4f8; --surface:#ffffff; --ink:#18171c; --muted:#6e6c78;
+    --accent:#8b7cf5; --accent-ink:#5b4bd6; --wash:rgba(139,124,245,.12);
+    --line:#e7e5ef; --r:22px; --pill:999px;
+    --serif:'Newsreader',Georgia,serif; --ui:'Hanken Grotesk',-apple-system,system-ui,sans-serif;
+    --shadow:0 1px 2px rgba(24,23,28,.04), 0 18px 50px -24px rgba(24,23,28,.22);
+  }
+  :root:not([data-theme="light"]){ }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#131218; --surface:#1b1a22; --ink:#f3f1f8; --muted:#a09eac;
+      --accent:#9d8ff7; --accent-ink:#c9bffb; --wash:rgba(157,143,247,.16);
+      --line:#2a2833; --shadow:0 1px 2px rgba(0,0,0,.4), 0 24px 60px -28px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#131218; --surface:#1b1a22; --ink:#f3f1f8; --muted:#a09eac;
+    --accent:#9d8ff7; --accent-ink:#c9bffb; --wash:rgba(157,143,247,.16);
+    --line:#2a2833; --shadow:0 1px 2px rgba(0,0,0,.4), 0 24px 60px -28px rgba(0,0,0,.7);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink); font-family:var(--ui);
+    font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;
+    overflow-x:clip;
+  }
+  .hero>*{min-width:0}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 24px}
+  a{color:inherit}
+  h1,h2,h3{font-family:var(--serif); font-weight:500; letter-spacing:-.02em; line-height:1.08; margin:0}
+
+  /* nav */
+  header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(1.4) blur(10px);
+    background:color-mix(in srgb, var(--paper) 82%, transparent); border-bottom:1px solid var(--line)}
+  .nav{display:flex; align-items:center; justify-content:space-between; height:66px}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--serif); font-size:22px; font-weight:600; text-decoration:none}
+  .mark{width:30px; height:30px; border-radius:9px; background:var(--accent); color:#fff; display:grid; place-items:center;
+    font-weight:600; font-size:18px}
+  .brand .dev{color:var(--muted); font-size:17px}
+  .nav-links{display:flex; align-items:center; gap:26px; font-size:15px}
+  .nav-links a{color:var(--muted); text-decoration:none}
+  .nav-links a:hover{color:var(--ink)}
+  @media(max-width:620px){ .nav-links a.hideable{display:none} }
+
+  /* buttons */
+  .btn{display:inline-flex; align-items:center; gap:8px; border-radius:var(--pill); padding:12px 22px;
+    font-family:var(--ui); font-weight:600; font-size:15px; text-decoration:none; border:1px solid transparent; cursor:pointer}
+  .btn.pri{background:var(--accent); color:#fff}
+  .btn.pri:hover{filter:brightness(1.05)}
+  .btn.ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--accent); color:var(--accent-ink)}
+  .btn.sm{padding:9px 16px; font-size:14px}
+
+  /* hero */
+  .hero{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:48px; align-items:center; padding:84px 0 64px}
+  @media(max-width:860px){ .hero{grid-template-columns:minmax(0,1fr); gap:36px; padding:56px 0 40px; text-align:center} }
+  .eyebrow{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-ink); font-weight:600; margin-bottom:18px}
+  .hero h1{font-size:58px}
+  @media(max-width:860px){ .hero h1{font-size:44px} }
+  .lede{color:var(--muted); font-size:19px; margin:20px 0 30px; max-width:30ch}
+  @media(max-width:860px){ .lede{margin-inline:auto} }
+  .cta{display:flex; gap:12px; flex-wrap:wrap}
+  @media(max-width:860px){ .cta{justify-content:center} }
+
+  /* install command */
+  .cmd{display:inline-flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line);
+    border-radius:14px; padding:13px 16px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14.5px;
+    box-shadow:var(--shadow); margin-top:26px}
+  .cmd code{color:var(--ink); overflow-x:auto; white-space:nowrap} .cmd .dollar{color:var(--muted); flex:0 0 auto}
+  .cmd .copy{flex:0 0 auto}
+  @media(max-width:560px){ .cmd{width:100%; max-width:100%; font-size:12.5px; gap:9px; padding:11px 13px}
+    .cmd code{flex:1 1 auto; min-width:0} }
+  .copy{border:0; background:var(--wash); color:var(--accent-ink); border-radius:8px; padding:6px 11px; font-family:var(--ui);
+    font-weight:600; font-size:13px; cursor:pointer}
+  .copy:hover{background:color-mix(in srgb, var(--accent) 22%, transparent)}
+
+  /* hero visual: mic orb */
+  .orbwrap{display:grid; place-items:center}
+  .orb{position:relative; width:190px; height:190px; display:grid; place-items:center}
+  .orb .disc{width:122px; height:122px; border-radius:50%; background:var(--accent);
+    box-shadow:0 24px 60px -16px rgba(139,124,245,.6); display:grid; place-items:center}
+  .orb .ring{position:absolute; width:122px; height:122px; border-radius:50%; border:1.5px solid var(--accent);
+    animation:sonar 2.4s ease-out infinite}
+  .orb .ring:nth-child(2){animation-delay:.8s} .orb .ring:nth-child(3){animation-delay:1.6s}
+  @keyframes sonar{0%{transform:scale(.7);opacity:.5}100%{transform:scale(1.8);opacity:0}}
+  .bars{display:flex; gap:5px; align-items:center; height:52px}
+  .bars span{width:6px; height:40%; background:#fff; border-radius:3px; animation:wave 1.1s ease-in-out infinite}
+  .bars span:nth-child(2){animation-delay:.15s} .bars span:nth-child(3){animation-delay:.3s}
+  .bars span:nth-child(4){animation-delay:.45s} .bars span:nth-child(5){animation-delay:.2s}
+  @keyframes wave{0%,100%{height:28%}50%{height:92%}}
+  @media(prefers-reduced-motion:reduce){ .ring,.bars span{animation:none} }
+
+  /* sections */
+  section{padding:56px 0}
+  .sec-head{text-align:center; max-width:40ch; margin:0 auto 40px}
+  .sec-head h2{font-size:38px}
+  .sec-head p{color:var(--muted); margin-top:12px}
+
+  /* features */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+  @media(max-width:860px){ .grid{grid-template-columns:1fr 1fr} }
+  @media(max-width:560px){ .grid{grid-template-columns:1fr} }
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:24px; box-shadow:var(--shadow)}
+  .card .k{font-size:22px; margin-bottom:12px}
+  .card h3{font-family:var(--ui); font-weight:700; font-size:16px; letter-spacing:0}
+  .card p{color:var(--muted); font-size:15px; margin:7px 0 0}
+  .tag{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-ink); background:var(--wash); border-radius:var(--pill); padding:2px 9px; margin-left:7px; vertical-align:middle}
+
+  /* steps */
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+  @media(max-width:720px){ .steps{grid-template-columns:1fr} }
+  .step .n{font-family:var(--serif); font-size:40px; color:var(--accent); line-height:1}
+  .step h3{font-family:var(--ui); font-weight:700; font-size:17px; margin:12px 0 6px}
+  .step p{color:var(--muted); font-size:15px; margin:0}
+
+  /* privacy band */
+  .band{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:40px; box-shadow:var(--shadow); text-align:center}
+  .band h2{font-size:32px} .band p{color:var(--muted); max-width:52ch; margin:14px auto 0}
+  .kbd{font-family:ui-monospace,Menlo,monospace; background:var(--wash); color:var(--accent-ink); border-radius:7px; padding:2px 8px; font-size:.9em}
+
+  footer{border-top:1px solid var(--line); margin-top:40px; padding:34px 0 50px; color:var(--muted); font-size:14px}
+  .foot{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap}
+  footer a{color:var(--muted); text-decoration:none} footer a:hover{color:var(--ink)}
+  .deva{font-family:var(--serif); font-style:italic}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="mark">M</span>Murti <span class="dev">मूर्ति</span></a>
+    <nav class="nav-links">
+      <a class="hideable" href="#features">Features</a>
+      <a class="hideable" href="#how">How it works</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/technomad641/murti" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<a id="top"></a>
+<main class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="eyebrow">On-device dictation for macOS</div>
+      <h1>Voice,<br>given form.</h1>
+      <p class="lede">Speak anywhere on your Mac. Murti carves your raw voice into
+        finished text — English, Hindi, and Hinglish — entirely on your device.</p>
+      <div class="cta">
+        <a class="btn pri" href="#install">Install with Homebrew</a>
+        <a class="btn ghost" href="https://github.com/technomad641/murti" target="_blank" rel="noopener">View source</a>
+      </div>
+      <div class="cmd">
+        <span class="dollar">$</span>
+        <code id="brewcmd">brew install technomad641/murti/murti</code>
+        <button class="copy" onclick="copyCmd(this)">Copy</button>
+      </div>
+    </div>
+    <div class="orbwrap">
+      <div class="orb" aria-hidden="true">
+        <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+        <span class="disc"><span class="bars"><span></span><span></span><span></span><span></span><span></span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="sec-head">
+      <h2>Finished text, not a transcript</h2>
+      <p>Everything runs locally on the Apple&nbsp;Silicon GPU. No account, no upload.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="k">🎙️</div><h3>Dictate anywhere</h3><p>Press ⌘⌥D, speak, press again. It types at your cursor in any app.</p></div>
+      <div class="card"><div class="k">⚡</div><h3>Instant when you stop</h3><p>Transcribes while you speak, so stopping is near-instant — no wait that grows with how long you talked.</p></div>
+      <div class="card"><div class="k">🌐</div><h3>English · Hindi · Hinglish</h3><p>True code-switching. Hindi comes out romanized by default, or Devanagari — your choice.</p></div>
+      <div class="card"><div class="k">🧠</div><h3>On-device</h3><p>Whisper large-v3-turbo runs on your GPU via MLX. Private and offline.</p></div>
+      <div class="card"><div class="k">⏸️</div><h3>Pause &amp; duck audio</h3><p>Music and video auto-pause while you speak and resume after; other audio ducks out of your mic.</p></div>
+      <div class="card"><div class="k">📖</div><h3>Learns your words</h3><p>An auto-learning dictionary remembers the names and jargon you dictate.</p></div>
+      <div class="card"><div class="k">📈</div><h3>Local insights</h3><p>Words, words-per-minute, time saved and streaks — computed and stored on your Mac.</p></div>
+      <div class="card"><div class="k">🔎</div><h3>Inspect <span class="tag">studio</span></h3><p>Point Murti at any app you own and read its architecture from the shipped binary. No source.</p></div>
+      <div class="card"><div class="k">☁️</div><h3>Cloud <span class="tag">preview</span></h3><p>Meetings, accounts, team and sync are previewed in the app — the dictation core never needs them.</p></div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how">
+    <div class="sec-head"><h2>Three keystrokes</h2></div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Click into any text field</h3><p>A message, a doc, your editor — wherever the cursor is blinking.</p></div>
+      <div class="step"><div class="n">2</div><h3>Press ⌘⌥D and speak</h3><p>Murti listens and transcribes on-device as you talk.</p></div>
+      <div class="step"><div class="n">3</div><h3>Press ⌘⌥D again</h3><p>Your finished sentence lands right where the cursor was.</p></div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section id="install">
+    <div class="band">
+      <h2>Install in one line</h2>
+      <p>On an Apple&nbsp;Silicon Mac with <a href="https://brew.sh" target="_blank" rel="noopener">Homebrew</a>. The first launch
+        sets up on-device models once; after that <span class="kbd">murti</span> starts instantly.</p>
+      <div class="cmd" style="margin:24px auto 0">
+        <span class="dollar">$</span>
+        <code>brew install technomad641/murti/murti</code>
+        <button class="copy" onclick="copyCmd(this)">Copy</button>
+      </div>
+      <p style="margin-top:20px">Prefer source, or want the double-click app? See the
+        <a href="https://github.com/technomad641/murti#install" target="_blank" rel="noopener">install guide</a>.</p>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section>
+    <div class="band">
+      <h2>Your voice stays yours</h2>
+      <p>Transcription runs entirely on-device — your audio is never uploaded for dictation.
+        Settings, dictionary and insights live in <span class="kbd">~/.config/murti</span>, and the dashboard
+        binds to <span class="kbd">127.0.0.1</span> only.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>MIT © Rajat Singh · <span class="deva">मूर्ति — form, given to the formless.</span></span>
+    <span>
+      <a href="https://github.com/technomad641/murti" target="_blank" rel="noopener">GitHub</a> ·
+      <a href="https://github.com/technomad641/homebrew-murti" target="_blank" rel="noopener">Homebrew tap</a> ·
+      built with <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  function copyCmd(btn){
+    const text = "brew install technomad641/murti/murti";
+    navigator.clipboard?.writeText(text).then(() => {
+      const old = btn.textContent; btn.textContent = "Copied ✓";
+      setTimeout(() => { btn.textContent = old; }, 1600);
+    }).catch(() => {});
+  }
+</script>
+</body>
+</html>
