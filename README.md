@@ -65,26 +65,90 @@ The **dashboard** above is served by a tiny `127.0.0.1`-only server
 (`murti/dashboard.py`) wired straight to the live engine: the toggles, insights and
 your dictionary are the real on-device state, read and written in place.
 
-## Install & run
+## Install
 
-Requires **macOS (Apple Silicon)**, **Python 3.12**, and [`uv`](https://docs.astral.sh/uv/).
+### On a MacBook (Apple Silicon) — ✅ supported
 
+You need **macOS 13+ on Apple Silicon** (M1 or later), the
+**[`uv`](https://docs.astral.sh/uv/)** package manager, and **Python 3.12**
+(uv can fetch Python for you).
+
+**1 — Install `uv`** (skip if you already have it):
+```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**2 — Download Murti and set it up:**
 ```sh
 git clone https://github.com/technomad641/murti.git
 cd murti
 uv venv --python 3.12 .venv
 uv pip install -r requirements.txt
-
-./run.sh          # launches the menu-bar app + dashboard
 ```
 
-A 🎙️ appears in your menu bar. Open **Dashboard** from its menu, then press
-**⌘⌥D** anywhere to dictate.
+**3 — Launch it:**
+```sh
+./run.sh
+```
+A **🎙️ icon appears in your menu bar** and the Murti window opens.
 
-### Permissions (first run)
+**4 — Grant three permissions** when macOS prompts (or in **System Settings →
+Privacy & Security**), then **quit and relaunch `./run.sh` once** so they apply:
+- **Microphone** — to hear you
+- **Accessibility** — to type the result into other apps
+- **Input Monitoring** — for the global shortcut
 
-macOS will prompt — grant all three in **System Settings → Privacy & Security**:
-**Microphone** (record) · **Accessibility** (paste) · **Input Monitoring** (hotkey).
+You're ready to dictate.
+
+### On an iPhone — ⚠️ not available (yet), and here's the honest why
+
+Murti is **macOS-only**. There is no iPhone app, and it's not a quick add: the
+whole point of Murti is typing your voice **into whatever other app you're in**
+(Slack, Notes, Safari…), and **iOS does not allow third-party apps to insert text
+into other apps** or register a system-wide push-to-talk shortcut. That's an
+Apple platform restriction, not a missing feature.
+
+The Apple-sanctioned path on iPhone is a **custom keyboard extension** — you'd
+switch to a "Murti" keyboard and tap a mic button inside it. That's a separate
+native iOS build (Swift), on the roadmap, not in this repo.
+
+## Using Murti — start, stop, and post your words
+
+**One shortcut toggles dictation — `⌘ ⌥ D` by default.** Press once to **start**,
+press again to **stop**.
+
+To **post dictated text into any text block** (a message, a doc, a code editor,
+a form field):
+
+1. **Click into the text field** where you want the words — so the cursor is
+   blinking there. *(Murti types at your cursor, so this step matters.)*
+2. **Press `⌘ ⌥ D`** — the menu-bar icon turns 🔴, Murti is listening.
+3. **Speak** your sentence — English, Hindi, or a mix.
+4. **Press `⌘ ⌥ D` again** — the icon shows ⏳ while it transcribes on-device…
+5. **…and your text appears right where the cursor was.** Done.
+
+> **Example:** Open a Slack message box, click into it, press `⌘ ⌥ D`, say
+> *“let’s ship this tomorrow morning,”* press `⌘ ⌥ D` again — the sentence lands
+> in the box, ready to send.
+
+**Other ways to start/stop:** the menu-bar **🎙️ → “Start / Stop dictation.”**
+
+**Pick your own shortcut:** open the dashboard (menu-bar 🎙️ → **Show window**) →
+**Dictation → Shortcut → Change**, then press your combo (e.g. `⌘ ⇧ Space`). It
+rebinds instantly — no restart.
+
+### How “posting” works (under the hood)
+
+When you stop, Murti transcribes locally, copies the finished text to your
+clipboard, synthesizes **`⌘ V`** at your cursor, then restores whatever was on
+your clipboard before. So it works in **any** app that accepts paste — no per-app
+setup needed.
+
+### Permissions recap
+
+Grant these once in **System Settings → Privacy & Security**:
+**Microphone** (record) · **Accessibility** (paste at your cursor) ·
+**Input Monitoring** (the global shortcut).
 
 ### Configure without editing JSON
 
