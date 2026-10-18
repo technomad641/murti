@@ -1,8 +1,9 @@
-"""Dictation app: a visible window **and** a menu-bar icon.
+"""Murti: a menu-bar app with a native window hosting the live dashboard.
 
 Press the global hotkey (default Cmd+Alt+D) to start recording; press again to
-stop, transcribe, and paste the result into the focused app. You can also use
-the on-screen window (Start/Stop button + toggles) or the menu-bar 🎙️ menu.
+stop, transcribe, and paste the result into the focused app. The app window is
+the Murti dashboard (a WKWebView over the local engine); the menu-bar 🎙️ icon
+shows status and reopens it.
 """
 from __future__ import annotations
 
@@ -13,16 +14,12 @@ import rumps
 from AppKit import (
     NSApplication,
     NSBackingStoreBuffered,
-    NSButton,
-    NSFont,
-    NSPopUpButton,
-    NSScrollView,
-    NSTextField,
-    NSTextView,
+    NSColor,
+    NSImage,
     NSThread,
     NSOperationQueue,
 )
-from Foundation import NSObject
+from Foundation import NSObject, NSURL, NSURLRequest
 from pynput import keyboard
 
 from .config import Settings
@@ -54,10 +51,15 @@ try:
 except ImportError:  # pragma: no cover
     NSButtonTypeSwitch = 3
 try:
-    from AppKit import NSBezelStyleRounded
+    from AppKit import (NSViewWidthSizable, NSViewHeightSizable,
+                        NSWindowStyleMaskResizable)
 except ImportError:  # pragma: no cover
-    NSBezelStyleRounded = 1
-NSBezelBorder = 2
+    NSViewWidthSizable, NSViewHeightSizable, NSWindowStyleMaskResizable = 2, 16, 8
+try:
+    from WebKit import WKWebView, WKWebViewConfiguration
+    _HAVE_WEBKIT = True
+except ImportError:  # pragma: no cover
+    _HAVE_WEBKIT = False
 
 
 def _on_main(fn):
@@ -69,134 +71,79 @@ def _on_main(fn):
 
 
 class DictationWindow(NSObject):
-    """The visible window: status, Start/Stop, toggles, and last result."""
+    """A native window hosting the Murti dashboard (WKWebView over the live engine)."""
 
     def initWithApp_(self, app):
         self = objc.super(DictationWindow, self).init()
         if self is None:
             return None
         self.app = app
+        self.webview = None
         self._build()
         return self
-
-    # ------------------------------------------------------------- building
-    @objc.python_method
-    def _label(self, text, frame, bold=False, size=13):
-        tf = NSTextField.alloc().initWithFrame_(frame)
-        tf.setStringValue_(text)
-        tf.setBezeled_(False)
-        tf.setDrawsBackground_(False)
-        tf.setEditable_(False)
-        tf.setSelectable_(False)
-        tf.setFont_(NSFont.boldSystemFontOfSize_(size) if bold
-                    else NSFont.systemFontOfSize_(size))
-        self.window.contentView().addSubview_(tf)
-        return tf
-
-    @objc.python_method
-    def _checkbox(self, title, frame, action, on):
-        cb = NSButton.alloc().initWithFrame_(frame)
-        cb.setButtonType_(NSButtonTypeSwitch)
-        cb.setTitle_(title)
-        cb.setState_(1 if on else 0)
-        cb.setTarget_(self)
-        cb.setAction_(action)
-        self.window.contentView().addSubview_(cb)
-        return cb
 
     @objc.python_method
     def _build(self):
         style = (NSWindowStyleMaskTitled | NSWindowStyleMaskClosable
-                 | NSWindowStyleMaskMiniaturizable)
+                 | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable)
         win = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
-            ((0, 0), (440, 380)), style, NSBackingStoreBuffered, False)
+            ((0, 0), (1160, 780)), style, NSBackingStoreBuffered, False)
         win.setTitle_("Murti")
         win.setReleasedWhenClosed_(False)
+        win.setMinSize_((900, 600))
+        win.setBackgroundColor_(
+            NSColor.colorWithSRGBRed_green_blue_alpha_(0.937, 0.914, 0.867, 1.0))
         win.center()
         self.window = win
         win.setDelegate_(self)
+        content = win.contentView()
 
-        s = self.app.settings
-        self._label("Murti", ((20, 345), (400, 24)), bold=True, size=17)
-        self.status_label = self._label("Idle — press Start or ⌘⌥D",
-                                         ((20, 318), (400, 20)))
+        if _HAVE_WEBKIT:
+            cfg = WKWebViewConfiguration.alloc().init()
+            web = WKWebView.alloc().initWithFrame_configuration_(
+                content.bounds(), cfg)
+            web.setAutoresizingMask_(NSViewWidthSizable | NSViewHeightSizable)
+            content.addSubview_(web)
+            self.webview = web
+            self._load()
 
-        self.start_btn = NSButton.alloc().initWithFrame_(((20, 272), (400, 36)))
-        self.start_btn.setTitle_("Start dictation")
-        self.start_btn.setBezelStyle_(NSBezelStyleRounded)
-        self.start_btn.setTarget_(self)
-        self.start_btn.setAction_("startStop:")
-        win.contentView().addSubview_(self.start_btn)
+    @objc.python_method
+    def _load(self):
+        if self.webview is None:
+            return
+        if self.app.dashboard_url:
+            url = NSURL.URLWithString_(self.app.dashboard_url)
+        else:  # fallback: load the bundled HTML straight from disk
+            import os
+            path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                                "ui", "index.html")
+            url = NSURL.fileURLWithPath_(path)
+        self.webview.loadRequest_(NSURLRequest.requestWithURL_(url))
 
-        self.translate_cb = self._checkbox(
-            "Translate", ((20, 236), (200, 22)), "toggleTranslate:",
-            s.translate_enabled)
-        self.roman_cb = self._checkbox(
-            "Romanized Hindi", ((220, 236), (210, 22)), "toggleScript:",
-            s.hindi_script == "romanized")
-
-        self._label("Target:", ((20, 203), (55, 22)))
-        self.lang_popup = NSPopUpButton.alloc().initWithFrame_pullsDown_(
-            ((78, 200), (160, 26)), False)
-        self.lang_popup.addItemsWithTitles_(LANGUAGES)
-        self.lang_popup.selectItemWithTitle_(s.target_language)
-        self.lang_popup.setTarget_(self)
-        self.lang_popup.setAction_("setLanguage:")
-        win.contentView().addSubview_(self.lang_popup)
-
-        self._label("Last result:", ((20, 172), (400, 18)))
-        scroll = NSScrollView.alloc().initWithFrame_(((20, 44), (400, 122)))
-        scroll.setHasVerticalScroller_(True)
-        scroll.setBorderType_(NSBezelBorder)
-        tv = NSTextView.alloc().initWithFrame_(((0, 0), (400, 122)))
-        tv.setEditable_(False)
-        tv.setFont_(NSFont.systemFontOfSize_(13))
-        scroll.setDocumentView_(tv)
-        win.contentView().addSubview_(scroll)
-        self.text_view = tv
-
-        self._label("Hotkey ⌘⌥D (needs Input Monitoring). Transcription is local.",
-                    ((20, 16), (400, 18)), size=11)
-
-    # -------------------------------------------------------------- actions
-    def startStop_(self, sender):
-        self.app.toggle_recording(None)
-
-    def toggleTranslate_(self, sender):
-        self.app.act_set_translate(bool(sender.state()))
-
-    def toggleScript_(self, sender):
-        self.app.act_set_script(bool(sender.state()))
-
-    def setLanguage_(self, sender):
-        self.app.act_set_target(sender.titleOfSelectedItem())
-
-    # window delegate: hide instead of destroy, so "Show window" can re-open
     def windowShouldClose_(self, sender):
-        sender.orderOut_(None)
+        sender.orderOut_(None)   # hide; the menu can re-open it
         return False
 
-    # ------------------------------------------------------------- view ops
     @objc.python_method
     def show(self):
+        self._load()  # refresh to the latest live state each time it opens
         self.window.makeKeyAndOrderFront_(None)
         NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
 
+    # kept as harmless no-ops so DictationApp's status/sync calls still work;
+    # the dashboard reflects live state over the /api, so these do nothing now
     @objc.python_method
     def syncControls(self):
-        s = self.app.settings
-        self.translate_cb.setState_(1 if s.translate_enabled else 0)
-        self.roman_cb.setState_(1 if s.hindi_script == "romanized" else 0)
-        self.lang_popup.selectItemWithTitle_(s.target_language)
+        pass
 
     def setStatusText_(self, text):
-        self.status_label.setStringValue_(text)
+        pass
 
     def setStartTitle_(self, text):
-        self.start_btn.setTitle_(text)
+        pass
 
     def setLastText_(self, text):
-        self.text_view.setString_(text or "")
+        pass
 
 
 class DictationApp(rumps.App):
@@ -250,9 +197,21 @@ class DictationApp(rumps.App):
 
     def _first_show(self, timer):
         timer.stop()
-        NSApplication.sharedApplication().setActivationPolicy_(
-            NSApplicationActivationPolicyRegular)
+        app = NSApplication.sharedApplication()
+        app.setActivationPolicy_(NSApplicationActivationPolicyRegular)
+        self._set_dock_icon(app)
         self.win.show()
+
+    def _set_dock_icon(self, app):
+        """Set the Dock/app icon at runtime (works for `run.sh` too, not just the bundle)."""
+        import os
+        icon = os.path.join(os.path.dirname(__file__), "assets", "icon.png")
+        try:
+            img = NSImage.alloc().initWithContentsOfFile_(icon)
+            if img:
+                app.setApplicationIconImage_(img)
+        except Exception:  # noqa: BLE001
+            pass
 
     # ----------------------------------------------------------------- hotkey
     def _start_hotkey(self):
