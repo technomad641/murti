@@ -46,9 +46,9 @@ No accounts. No upload. The transcription runs **on your device**.
 | 🔇 **Mute other audio** | Ducks system output so nothing bleeds into your mic. |
 | 📖 **Auto-learning dictionary** | Learns the names and jargon you dictate so it spells them right next time. |
 | 📈 **Insights & voice profile** | Words dictated, words-per-minute, time saved, streaks — computed locally. |
-| 🎧 **Headset & ring support** | Detects headsets and call-control rings, prefers them automatically. |
+| 🎧 **Device-aware** | Lists your input devices and flags connected headsets, right in the app. |
 | 🔎 **Inspect** *(studio)* | Point Murti at any app you own and get its full architecture from the shipped binary. No source code. |
-| ☁️ **Cloud, optional** | Meeting notetaker (Zoom), accounts, team, billing and sync are available on top — the dictation core never needs them. |
+| ☁️ **Cloud** *(preview)* | Meeting notetaker (Zoom), accounts, team, billing and sync appear in the dashboard as design previews — not yet wired to a backend. The dictation core never needs them. |
 
 ## How it works
 
@@ -220,7 +220,7 @@ reverse-engineering engine. (The hero image above is a real Inspect run.)
 - **Transcription is on-device.** Your voice is not uploaded for dictation.
 - Settings, dictionary and insights live locally in `~/.config/murti/`.
 - The dashboard server binds to `127.0.0.1` only.
-- Cloud features (meetings, accounts, sync) are opt-in and clearly marked.
+- Cloud features (meetings, accounts, sync) are **previews only** — not wired to any backend, so nothing syncs off your device.
 
 ## Design
 
