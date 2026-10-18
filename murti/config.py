@@ -44,6 +44,10 @@ class Settings:
     hotkey: str = "<cmd>+<alt>+d"  # pynput GlobalHotKeys spec; push-to-toggle recording
     input_device: str = ""         # preferred mic name; "" = system default
 
+    # --- latency ---
+    streaming: bool = True          # transcribe while you speak (instant stop)
+    warm_on_launch: bool = True     # preload the model at startup (no cold start)
+
     # --- while-dictating behavior (local, on-device) ---
     pause_media: bool = True        # pause Music/Spotify/video while recording
     mute_others: bool = False       # duck system output volume while recording

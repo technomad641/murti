@@ -21,6 +21,14 @@ class STTEngine:
     def transcribe(self, audio: "np.ndarray | str") -> tuple[str, str | None]:
         raise NotImplementedError
 
+    def warmup(self) -> None:
+        """Force the model weights to load now (they load lazily on the first
+        transcribe otherwise), so the first real dictation isn't a cold start."""
+        try:
+            self.transcribe(np.zeros(8000, dtype=np.float32))  # ~0.5s of silence
+        except Exception:  # noqa: BLE001 — warm-up must never raise
+            pass
+
 
 class MLXEngine(STTEngine):
     name = "mlx"

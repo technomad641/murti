@@ -10,6 +10,11 @@ Plus a studio tool that reads any app you own and reveals the form hidden inside
 
 <img src="demo/murti-hero.svg" alt="Murti — an app being x-rayed into its architecture" width="100%">
 
+[![brew install technomad641/murti/murti](https://img.shields.io/badge/brew-technomad641%2Fmurti-F6A623?logo=homebrew&logoColor=white)](https://github.com/technomad641/homebrew-murti)
+![macOS · Apple Silicon](https://img.shields.io/badge/macOS-Apple%20Silicon-111111?logo=apple&logoColor=white)
+![transcription 100% on-device](https://img.shields.io/badge/transcription-100%25%20on--device-3aa675)
+![license MIT](https://img.shields.io/badge/license-MIT-8b7cf5)
+
 <sub>Local Whisper on the Apple Silicon GPU · nothing leaves your machine · built with Claude Code</sub>
 
 </div>
@@ -33,6 +38,7 @@ No accounts. No upload. The transcription runs **on your device**.
 | | |
 |---|---|
 | 🎙️ **Dictate anywhere** | Press **⌘⌥D**, speak, press again. It transcribes and types at your cursor in any app. |
+| ⚡ **Instant when you stop** | Murti transcribes *while you speak*, so stopping is near-instant — not a wait that grows with how long you talked. |
 | ⌨️ **Your own shortcut** | One toggle starts/stops. Record a custom key combo right in the app — it rebinds instantly, no restart. |
 | 🌐 **English · Hindi · Hinglish** | True code-switching. Hindi comes out **romanized (Hinglish)** by default, or Devanagari — your choice. |
 | 🧠 **On-device** | Whisper `large-v3-turbo` runs locally on the Apple Silicon GPU. Private and offline. |
@@ -46,24 +52,36 @@ No accounts. No upload. The transcription runs **on your device**.
 
 ## How it works
 
-```
- ⌘⌥D  →  record mic (16 kHz)  →  Whisper large-v3-turbo (local, MLX GPU)
-                                          │
-                                   shape the text
-                      ├─ romanize Hindi  (rules offline · Claude online)
-                      ├─ translate       (argos offline · Claude online)
-                      └─ personal dictionary + corrections
-                                          │
-                           paste at your cursor (⌘V)
+```mermaid
+flowchart TD
+  subgraph device["🖥  Your Mac — everything in this box runs on-device"]
+    direction LR
+    MIC["🎙 Microphone"] --> REC["Recorder<br/>16 kHz mono"]
+    HOT["⌘⌥D toggle"] -.->|start / stop| REC
+    REC -->|audio, live while you speak| STR["Streaming transcriber<br/>commits finished words at pauses<br/>so only the tail waits at stop"]
+    STR --> W["Whisper large-v3-turbo<br/>MLX · Apple Silicon GPU<br/>preloaded at launch"]
+    W --> SHAPE["Shape the text<br/>punctuation · romanize Hindi<br/>translate · personal dictionary"]
+    SHAPE --> INS["Inserter<br/>clipboard + synthesized ⌘V"]
+    INS --> CUR["➜ your cursor, in any app"]
+    STORE[("~/.config/murti<br/>settings · dictionary · insights")]
+    SHAPE <--> STORE
+    DASH["Dashboard<br/>127.0.0.1 · WKWebView"] <--> STORE
+  end
+  SHAPE -.->|optional · only with an API key| CLAUDE["Claude online<br/>polish romanize / translate"]
+  INSPECT["🔎 Inspect · REA engine<br/>reads a shipped binary →<br/>architecture report"] -.->|studio tool| DASH
 ```
 
-Everything in that path is **local by default**. The optional online step (Claude)
-only polishes romanization/translation when you have a key — and transcription is
-*always* on-device regardless.
+Two things keep it fast: the model is **preloaded at launch** (no cold start on
+your first dictation), and audio is **transcribed as you speak** — finished words
+are committed at natural pauses, so when you stop, only the last few seconds
+remain. The post-stop wait stays roughly constant instead of growing with the
+length of your dictation.
 
-The **dashboard** above is served by a tiny `127.0.0.1`-only server
-(`murti/dashboard.py`) wired straight to the live engine: the toggles, insights and
-your dictionary are the real on-device state, read and written in place.
+Everything in the box above is **local by default**. The optional online step
+(Claude) only polishes romanization/translation when you have a key — and
+transcription is *always* on-device regardless. The **dashboard** is served by a
+tiny `127.0.0.1`-only server (`murti/dashboard.py`) wired straight to the live
+engine, so its toggles, insights and dictionary are the real on-device state.
 
 ## Install
 
@@ -74,77 +92,61 @@ brew install technomad641/murti/murti
 murti
 ```
 
-That's it. Homebrew adds the [tap](https://github.com/technomad641/homebrew-murti)
+Homebrew adds the [tap](https://github.com/technomad641/homebrew-murti)
 automatically. The first `murti` launch sets up its environment and downloads
 the on-device speech model once (a few minutes); after that it starts instantly.
-Then grant the three permissions below and press **⌘⌥D** to dictate.
+Then grant the [permissions](#permissions) below and press **⌘⌥D** to dictate.
 
-> Requires an up-to-date Xcode Command Line Tools (`xcode-select --install`).
-> Update as `brew upgrade murti`, remove with `brew uninstall murti`.
+> Needs up-to-date Xcode Command Line Tools (`xcode-select --install`).
+> Update with `brew upgrade murti`, remove with `brew uninstall murti`.
 
-### From source (for development) — Apple Silicon
+### From source — Apple Silicon
 
-You need **macOS 13+ on Apple Silicon** (M1 or later), the
+Needs **macOS 13+ on Apple Silicon** (M1+), the
 **[`uv`](https://docs.astral.sh/uv/)** package manager, and **Python 3.12**
-(uv can fetch Python for you).
+(uv can fetch it for you).
 
-**1 — Install `uv`** (skip if you already have it):
 ```sh
+# 1 — install uv (skip if you have it)
 curl -LsSf https://astral.sh/uv/install.sh | sh
-```
 
-**2 — Download Murti and set it up:**
-```sh
+# 2 — get Murti and set it up
 git clone https://github.com/technomad641/murti.git
 cd murti
 uv venv --python 3.12 .venv
 uv pip install -r requirements.txt
-```
 
-**3 — Launch it:**
-```sh
+# 3 — launch it
 ./run.sh
 ```
-A **🎙️ icon appears in your menu bar** and the Murti window opens.
 
-**4 — Grant three permissions** when macOS prompts (or in **System Settings →
-Privacy & Security**), then **quit and relaunch `./run.sh` once** so they apply:
+A **🎙️ icon appears in your menu bar** and the Murti window opens. Grant the
+[permissions](#permissions) below, relaunch once, and you're ready.
+
+### Permissions
+
+Grant these once in **System Settings → Privacy & Security**, then quit and
+relaunch Murti so they take effect:
+
 - **Microphone** — to hear you
 - **Accessibility** — to type the result into other apps
-- **Input Monitoring** — for the global shortcut
+- **Input Monitoring** — for the global ⌘⌥D shortcut
 
-You're ready to dictate.
+### Prefer to double-click? Build an app bundle
 
-### On an iPhone — ⚠️ not available (yet), and here's the honest why
-
-Murti is **macOS-only**. There is no iPhone app, and it's not a quick add: the
-whole point of Murti is typing your voice **into whatever other app you're in**
-(Slack, Notes, Safari…), and **iOS does not allow third-party apps to insert text
-into other apps** or register a system-wide push-to-talk shortcut. That's an
-Apple platform restriction, not a missing feature.
-
-The Apple-sanctioned path on iPhone is a **custom keyboard extension** — you'd
-switch to a "Murti" keyboard and tap a mic button inside it. That's a separate
-native iOS build (Swift), on the roadmap, not in this repo.
-
-### Prefer to double-click instead of the terminal? Build an app bundle
-
-Once set up, you can wrap Murti into a real **`Murti.app`** you launch from
-Finder or the Dock — no terminal, with its own icon:
+Wrap Murti into a real **`Murti.app`** you launch from Finder or the Dock — no
+terminal, with its own icon:
 
 ```sh
-scripts/build_app.sh          # builds dist/Murti.app (via py2app)
-open dist/Murti.app           # …or just double-click it in Finder
+scripts/build_app.sh     # builds dist/Murti.app (via py2app)
+open dist/Murti.app      # …or just double-click it in Finder
 ```
 
-This build is **ad-hoc code-signed and de-quarantined**, so it launches on
-*your* Mac with no Gatekeeper warning. It's an *alias* build — small and
-instant, but tied to this machine (it references your `.venv`).
-
-**To hand Murti to someone else's Mac**, you need a self-contained, **notarized**
-bundle. That requires a paid **Apple Developer account** and a *Developer ID
-Application* certificate (nothing else can satisfy Gatekeeper on another
-machine). With the cert in your keychain:
+This build is **ad-hoc code-signed and de-quarantined**, so it launches on *your*
+Mac with no Gatekeeper warning. It's an *alias* build — small and instant, but
+tied to this machine. To hand Murti to **someone else's** Mac you need a
+self-contained, **notarized** bundle, which requires a paid **Apple Developer
+account** and a *Developer ID Application* certificate:
 
 ```sh
 scripts/build_app.sh standalone   # self-contained bundle (large)
@@ -155,56 +157,42 @@ scripts/sign_notarize.sh          # Developer-ID sign → notarize → staple
 ```
 
 `scripts/sign_notarize.sh` auto-detects your certificate and tells you exactly
-what's missing if the account/cert/Xcode aren't in place yet. (The standalone
-freeze of the on-device ML stack is large and may need per-dependency tuning —
-do it when you're actually ready to distribute.)
+what's missing if the account/cert/Xcode aren't in place.
+
+### On an iPhone — ⚠️ not available (yet)
+
+Murti is **macOS-only**, and iPhone isn't a quick add. Its whole point is typing
+your voice **into whatever app you're in**, and **iOS doesn't let third-party
+apps insert text into other apps** or register a system-wide push-to-talk
+shortcut — an Apple platform restriction, not a missing feature. The sanctioned
+path is a **custom keyboard extension** (switch to a "Murti" keyboard, tap a mic
+button): a separate native iOS build (Swift), on the roadmap, not in this repo.
 
 ## Using Murti — start, stop, and post your words
 
-**One shortcut toggles dictation — `⌘ ⌥ D` by default.** Press once to **start**,
-press again to **stop**.
+**One shortcut toggles dictation — `⌘⌥D` by default.** Press to **start**, press
+again to **stop**. To post dictated text into any text block:
 
-To **post dictated text into any text block** (a message, a doc, a code editor,
-a form field):
-
-1. **Click into the text field** where you want the words — so the cursor is
-   blinking there. *(Murti types at your cursor, so this step matters.)*
-2. **Press `⌘ ⌥ D`** — the menu-bar icon turns 🔴, Murti is listening.
-3. **Speak** your sentence — English, Hindi, or a mix.
-4. **Press `⌘ ⌥ D` again** — the icon shows ⏳ while it transcribes on-device…
+1. **Click into the text field** so the cursor is blinking there. *(Murti types
+   at your cursor.)*
+2. **Press `⌘⌥D`** — the menu-bar icon turns 🔴, Murti is listening.
+3. **Speak** — English, Hindi, or a mix.
+4. **Press `⌘⌥D` again** — a brief ⏳ while it finishes the last words on-device…
 5. **…and your text appears right where the cursor was.** Done.
 
-> **Example:** Open a Slack message box, click into it, press `⌘ ⌥ D`, say
-> *“let’s ship this tomorrow morning,”* press `⌘ ⌥ D` again — the sentence lands
-> in the box, ready to send.
+> **Example:** open a Slack box, click into it, press `⌘⌥D`, say *"let's ship this
+> tomorrow morning,"* press `⌘⌥D` again — the sentence lands in the box.
 
-**Other ways to start/stop:** the menu-bar **🎙️ → “Start / Stop dictation.”**
+**Other ways to start/stop:** the menu-bar **🎙️ → "Start / Stop dictation."**
 
-**Pick your own shortcut:** open the dashboard (menu-bar 🎙️ → **Show window**) →
-**Dictation → Shortcut → Change**, then press your combo (e.g. `⌘ ⇧ Space`). It
-rebinds instantly — no restart.
+**Pick your own shortcut:** menu-bar 🎙️ → **Show window** → **Dictation →
+Shortcut → Change**, then press your combo (e.g. `⌘⇧Space`). It rebinds instantly.
 
-### How “posting” works (under the hood)
+**How posting works:** Murti copies the finished text to your clipboard,
+synthesizes **`⌘V`** at your cursor, then restores your previous clipboard — so it
+works in **any** app that accepts paste, with no per-app setup.
 
-When you stop, Murti transcribes locally, copies the finished text to your
-clipboard, synthesizes **`⌘ V`** at your cursor, then restores whatever was on
-your clipboard before. So it works in **any** app that accepts paste — no per-app
-setup needed.
-
-### Permissions recap
-
-Grant these once in **System Settings → Privacy & Security**:
-**Microphone** (record) · **Accessibility** (paste at your cursor) ·
-**Input Monitoring** (the global shortcut).
-
-### Configure without editing JSON
-
-```sh
-./.venv/bin/python -m murti.configure --translate on --target Hindi
-./.venv/bin/python -m murti.configure --script devanagari
-```
-
-### The Inspect tool
+## The Inspect tool
 
 ```sh
 ./.venv/bin/python -m murti.inspect "/Applications/Some App.app"
@@ -214,12 +202,17 @@ Reads the shipped binary and prints an architecture report (frameworks, native
 modules, windows, backend). Structural metadata only — **no source, assets, or
 secrets, and nothing that bypasses licensing or DRM.** For apps you own or are
 authorized to analyze. Powered by the [REA](https://www.npmjs.com/package/rea-agents)
-reverse-engineering engine. (The hero above is a real Inspect run.)
+reverse-engineering engine. (The hero image above is a real Inspect run.)
 
-## Tests
+## Configure & test
 
 ```sh
-./.venv/bin/python -m pytest tests -q        # 34 offline tests, no mic / no network
+# tweak settings without editing JSON (source installs)
+./.venv/bin/python -m murti.configure --translate on --target Hindi
+./.venv/bin/python -m murti.configure --script devanagari
+
+# 42 offline tests — no mic, no network
+./.venv/bin/python -m pytest tests -q
 ```
 
 ## Privacy
@@ -233,10 +226,10 @@ reverse-engineering engine. (The hero above is a real Inspect run.)
 
 A light, airy interface in the spirit of modern privacy-first products —
 **Newsreader** serif headlines over **Hanken Grotesk**, a near-white canvas,
-soft-rounded cards floating on diffuse shadows, fully-rounded pill controls, and
-a single lavender accent. Built to a disciplined system: two type families, four
-colours, an 8-pt grid. The dashboard is a native window (WKWebView) wired to the
-local engine, so what you see is live on-device state.
+soft-rounded cards on diffuse shadows, pill controls, and a single lavender
+accent. Built to a disciplined system: two type families, four colours, an 8-pt
+grid. The dashboard is a native window (WKWebView) wired to the local engine, so
+what you see is live on-device state.
 
 ## License
 

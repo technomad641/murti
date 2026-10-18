@@ -20,13 +20,23 @@ class Recorder:
         self._stream: sd.InputStream | None = None
         self._lock = threading.Lock()
         self.recording = False
+        # Optional realtime sink (e.g. a StreamingTranscriber.feed). Must be
+        # cheap/non-blocking — it runs on the audio thread.
+        self.on_chunk = None
 
     def _callback(self, indata, frames, time_info, status):  # noqa: ANN001
         if status:
             # Overflows etc. are non-fatal; keep going.
             pass
+        chunk = indata.copy().reshape(-1)
         with self._lock:
-            self._frames.append(indata.copy().reshape(-1))
+            self._frames.append(chunk)
+        sink = self.on_chunk
+        if sink is not None:
+            try:
+                sink(chunk)
+            except Exception:  # noqa: BLE001 — never let a sink break capture
+                pass
 
     def start(self) -> None:
         if self.recording:

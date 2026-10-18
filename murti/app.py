@@ -23,7 +23,7 @@ from Foundation import NSObject, NSURL, NSURLRequest
 from pynput import keyboard
 
 from .config import Settings
-from .pipeline import Pipeline
+from .pipeline import Pipeline, SAMPLE_RATE
 from .media import MediaController
 
 LANGUAGES = ["English", "Hindi", "Spanish", "French", "German"]
@@ -151,6 +151,8 @@ class DictationApp(rumps.App):
         super().__init__(IDLE, quit_button=None)
         self.settings = Settings.load()
         self.pipeline: Pipeline | None = None  # built lazily (model load is slow)
+        self._pipe_lock = threading.Lock()
+        self._stream_tx = None  # active StreamingTranscriber while recording
         self.recorder = None
         self.media = MediaController()
         self._busy = False
@@ -202,6 +204,23 @@ class DictationApp(rumps.App):
         app.setActivationPolicy_(NSApplicationActivationPolicyRegular)
         self._set_dock_icon(app)
         self.win.show()
+        # Preload the speech model in the background so the first dictation
+        # doesn't pay the multi-second cold start.
+        if self.settings.warm_on_launch:
+            threading.Thread(target=self._warm_pipeline, daemon=True).start()
+
+    # ------------------------------------------------------------- pipeline
+    def _ensure_pipeline(self) -> Pipeline:
+        with self._pipe_lock:
+            if self.pipeline is None:
+                self.pipeline = Pipeline(self.settings)
+            return self.pipeline
+
+    def _warm_pipeline(self):
+        try:
+            self._ensure_pipeline().engine.warmup()
+        except Exception:  # noqa: BLE001 — warm-up is best-effort
+            pass
 
     def _set_dock_icon(self, app):
         """Set the Dock/app icon at runtime (works for `run.sh` too, not just the bundle)."""
@@ -281,24 +300,49 @@ class DictationApp(rumps.App):
                 )
                 self._set_state(IDLE, f"Microphone unavailable ({e})", "Start dictation")
                 return
+            self._start_streaming()
             self.media.on_record_start(self.settings.pause_media,
                                        self.settings.mute_others)
             self._set_state(RECORDING, "● Recording… click Stop or press ⌘⌥D",
                             "Stop dictation")
         else:
+            self.recorder.on_chunk = None
             audio = self.recorder.stop()
+            stream_tx, self._stream_tx = self._stream_tx, None
             self.media.on_record_stop(self.settings.pause_media,
                                       self.settings.mute_others)
             self._set_state(BUSY, "Transcribing…", "Working…")
             self._busy = True
-            threading.Thread(target=self._run_pipeline, args=(audio,), daemon=True).start()
+            threading.Thread(target=self._run_pipeline,
+                             args=(audio, stream_tx), daemon=True).start()
 
-    def _run_pipeline(self, audio):
+    def _start_streaming(self):
+        """If enabled and the model is already warm, transcribe as the user
+        speaks so stopping is near-instant. Any failure silently falls back to
+        the whole-clip path at stop (no regression)."""
+        self._stream_tx = None
+        if not self.settings.streaming or self.pipeline is None:
+            return
+        try:
+            from .streaming import StreamingTranscriber
+
+            tx = StreamingTranscriber(self.pipeline.engine)
+            tx.start()
+            self.recorder.on_chunk = tx.feed
+            self._stream_tx = tx
+        except Exception:  # noqa: BLE001
+            self._stream_tx = None
+
+    def _run_pipeline(self, audio, stream_tx=None):
         final = ""
         try:
-            if self.pipeline is None:
-                self.pipeline = Pipeline(self.settings)
-            final = self.pipeline.dictate(audio, insert=True)
+            pipe = self._ensure_pipeline()
+            secs = len(audio) / SAMPLE_RATE if audio is not None else 0.0
+            if stream_tx is not None:
+                raw, lang = stream_tx.finalize()
+                final = pipe.dictate_streamed(raw, lang, secs, insert=True)
+            else:
+                final = pipe.dictate(audio, insert=True)
         except Exception as e:  # noqa: BLE001
             rumps.notification("Murti", "Error", str(e))
             final = f"[error] {e}"
