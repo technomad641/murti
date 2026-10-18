@@ -161,7 +161,7 @@ def build():
     # captions
     cy2 = H - 34
     for cls, txt in (("q1", "This is the app you use."),
-                     ("q2", "Teardown x-rays the shipped binary…"),
+                     ("q2", "Murti x-rays the shipped binary…"),
                      ("q3", "…and reveals everything inside. No source code.")):
         P.append(f'<text class="{cls}" x="{W/2}" y="{cy2}" fill="{FG}" font-size="15.5" '
                  f'font-weight="600" text-anchor="middle">{esc(txt)}</text>')

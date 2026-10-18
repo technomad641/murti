@@ -53,6 +53,6 @@
 <g class="c6"><rect x="480" y="460" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="496" cy="477" r="3" fill="#18171c"/><text x="508" y="477" fill="#18171c" font-size="12.5" font-weight="500">Pause media</text></g>
 <g class="c7"><rect x="696" y="460" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="712" cy="477" r="3" fill="#18171c"/><text x="724" y="477" fill="#18171c" font-size="12.5" font-weight="500">Auto-learn dictionary</text></g>
 <text class="q1" x="470.0" y="566" fill="#18171c" font-size="15.5" font-weight="600" text-anchor="middle">This is the app you use.</text>
-<text class="q2" x="470.0" y="566" fill="#18171c" font-size="15.5" font-weight="600" text-anchor="middle">Teardown x-rays the shipped binary…</text>
+<text class="q2" x="470.0" y="566" fill="#18171c" font-size="15.5" font-weight="600" text-anchor="middle">Murti x-rays the shipped binary…</text>
 <text class="q3" x="470.0" y="566" fill="#18171c" font-size="15.5" font-weight="600" text-anchor="middle">…and reveals everything inside. No source code.</text>
 </svg>
