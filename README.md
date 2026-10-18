@@ -67,7 +67,22 @@ your dictionary are the real on-device state, read and written in place.
 
 ## Install
 
-### On a MacBook (Apple Silicon) — ✅ supported
+### The easy way — Homebrew 🍺
+
+```sh
+brew install technomad641/murti/murti
+murti
+```
+
+That's it. Homebrew adds the [tap](https://github.com/technomad641/homebrew-murti)
+automatically. The first `murti` launch sets up its environment and downloads
+the on-device speech model once (a few minutes); after that it starts instantly.
+Then grant the three permissions below and press **⌘⌥D** to dictate.
+
+> Requires an up-to-date Xcode Command Line Tools (`xcode-select --install`).
+> Update as `brew upgrade murti`, remove with `brew uninstall murti`.
+
+### From source (for development) — Apple Silicon
 
 You need **macOS 13+ on Apple Silicon** (M1 or later), the
 **[`uv`](https://docs.astral.sh/uv/)** package manager, and **Python 3.12**
