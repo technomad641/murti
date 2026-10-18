@@ -87,14 +87,29 @@ class _Handler(SimpleHTTPRequestHandler):
         path = self.path.split("?")[0]
         data = self._read_json()
         if path == "/api/settings":
-            return self._json(apply_settings(data))
+            result = apply_settings(data)
+            if _ON_CHANGE is not None:
+                try:
+                    _ON_CHANGE(data)   # let the app react (e.g. rebind the hotkey)
+                except Exception:  # noqa: BLE001
+                    pass
+            return self._json(result)
         if path == "/api/dictionary":
             return self._json(add_word(data.get("word", "")))
         return self._json({"ok": False, "error": "not found"}, 404)
 
 
-def serve(host: str = "127.0.0.1", port: int = 0):
-    """Start the dashboard server on a background thread. Returns (httpd, url)."""
+_ON_CHANGE = None  # optional callback(patch) invoked after a settings write
+
+
+def serve(host: str = "127.0.0.1", port: int = 0, on_change=None):
+    """Start the dashboard server on a background thread. Returns (httpd, url).
+
+    ``on_change(patch)`` is called after each /api/settings write so the app can
+    react — notably to rebind the global hotkey when it changes.
+    """
+    global _ON_CHANGE
+    _ON_CHANGE = on_change
     httpd = ThreadingHTTPServer((host, port), _Handler)
     httpd.daemon_threads = True
     bound_port = httpd.server_address[1]

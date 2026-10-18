@@ -186,7 +186,15 @@
         <div class="card">
           <div class="hero">
             <div class="orb"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
-            <div class="meta"><h3>Ready to dictate</h3><p>Press <span class="kbd">⌘ ⌥ D</span> &nbsp;·&nbsp; English · Hindi · Hinglish &nbsp;·&nbsp; on-device</p></div>
+            <div class="meta"><h3>Ready to dictate</h3><p>Press <span class="kbd" id="hk-inline">⌘ ⌥ D</span> &nbsp;·&nbsp; English · Hindi · Hinglish &nbsp;·&nbsp; on-device</p></div>
+          </div>
+        </div>
+        <h2>Shortcut</h2>
+        <div class="card rows">
+          <div class="row">
+            <div class="tx"><b>Start / stop dictation</b><span>One shortcut toggles it — press to start, press again to stop. Click Change, then press your combo.</span></div>
+            <span class="kbd" id="hk-display">⌘ ⌥ D</span>
+            <button class="btn" id="hk-change">Change</button>
           </div>
         </div>
         <h2>While dictating</h2>
@@ -402,6 +410,61 @@
     catch (e) {}
   }));
 
+  // ── Hotkey picker ──────────────────────────────────────────────
+  const MODS = {'<cmd>':'⌘','<alt>':'⌥','<ctrl>':'⌃','<shift>':'⇧','<space>':'Space'};
+  function hkToSymbols(hk){
+    if (!hk) return '—';
+    return hk.split('+').map(p => {
+      const k = p.trim().toLowerCase();
+      if (MODS[k]) return MODS[k];
+      const m = k.match(/^<(.+)>$/);
+      return m ? m[1].toUpperCase() : k.toUpperCase();
+    }).join(' ');
+  }
+  function setHotkeyDisplay(hk){
+    const sym = hkToSymbols(hk);
+    const d = document.getElementById('hk-display'); if (d) d.textContent = sym;
+    const i = document.getElementById('hk-inline'); if (i) i.textContent = sym;
+  }
+  (function setupPicker(){
+    const btn = document.getElementById('hk-change');
+    const disp = document.getElementById('hk-display');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const prev = disp.textContent;
+      disp.textContent = 'Press keys…';
+      btn.textContent = 'Listening';
+      const onKey = async (e) => {
+        if (['Meta','Control','Alt','Shift'].includes(e.key)) return; // wait for a real key
+        e.preventDefault();
+        const mods = [];
+        if (e.metaKey) mods.push('<cmd>');
+        if (e.ctrlKey) mods.push('<ctrl>');
+        if (e.altKey)  mods.push('<alt>');
+        if (e.shiftKey) mods.push('<shift>');
+        let token;
+        if (e.key === ' ') token = '<space>';
+        else if (e.key.length === 1) token = e.key.toLowerCase();
+        else if (/^F\d+$/.test(e.key)) token = '<' + e.key.toLowerCase() + '>';
+        else token = '<' + e.key.toLowerCase() + '>';
+        window.removeEventListener('keydown', onKey, true);
+        btn.textContent = 'Change';
+        if (mods.length === 0){            // require a modifier
+          disp.textContent = 'Add a modifier';
+          setTimeout(() => disp.textContent = prev, 1200);
+          return;
+        }
+        const hk = [...mods, token].join('+');
+        setHotkeyDisplay(hk);
+        if (LIVE){
+          try { await fetch('/api/settings', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({hotkey: hk})}); }
+          catch (err) {}
+        }
+      };
+      window.addEventListener('keydown', onKey, true);
+    });
+  })();
+
   // Pull live state from the Murti engine (no-op when opened as a static file)
   (async function connect(){
     try{
@@ -409,6 +472,8 @@
       if (!r.ok) return;
       const s = await r.json();
       LIVE = true; document.body.dataset.live = '1';
+
+      if (s.settings && s.settings.hotkey) setHotkeyDisplay(s.settings.hotkey);
 
       document.querySelectorAll('[data-key]').forEach(el => {
         const k = el.dataset.key;

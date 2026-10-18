@@ -154,12 +154,13 @@ class DictationApp(rumps.App):
         self.recorder = None
         self.media = MediaController()
         self._busy = False
+        self._hk = None  # the global-hotkey listener (rebindable)
 
         # live dashboard server (serves ui/ + a JSON API over the real engine)
         self.dashboard_url = None
         try:
             from .dashboard import serve
-            self._httpd, self.dashboard_url = serve()
+            self._httpd, self.dashboard_url = serve(on_change=self._on_settings_changed)
         except Exception:  # noqa: BLE001 — dashboard is optional
             pass
 
@@ -215,6 +216,17 @@ class DictationApp(rumps.App):
 
     # ----------------------------------------------------------------- hotkey
     def _start_hotkey(self):
+        self._bind_hotkey()
+
+    def _bind_hotkey(self):
+        """(Re)register the global hotkey from self.settings.hotkey."""
+        try:
+            if self._hk is not None:
+                self._hk.stop()
+        except Exception:  # noqa: BLE001
+            pass
+        self._hk = None
+
         def on_activate():
             # pynput callback runs on its own thread; defer to a worker.
             self.toggle_recording(None)
@@ -223,15 +235,22 @@ class DictationApp(rumps.App):
             hk = keyboard.GlobalHotKeys({self.settings.hotkey: on_activate})
             hk.daemon = True
             hk.start()
+            self._hk = hk
         except Exception as e:  # noqa: BLE001
-            # Usually missing Input Monitoring permission. App still works via
-            # the window's Start button or the menu item.
+            # Usually missing Input Monitoring permission, or an invalid combo.
+            # App still works via the menu item.
             rumps.notification(
-                "Murti",
-                "Global hotkey unavailable",
-                "Grant Input Monitoring in System Settings, or use the window. "
-                f"({e})",
+                "Murti", "Global hotkey unavailable",
+                "Grant Input Monitoring in System Settings, or pick another "
+                f"shortcut. ({e})",
             )
+
+    def _on_settings_changed(self, patch):
+        """Called by the dashboard after a settings write — keep the app in sync."""
+        old_hotkey = self.settings.hotkey
+        self.settings = Settings.load()
+        if (patch or {}).get("hotkey") and self.settings.hotkey != old_hotkey:
+            _on_main(self._bind_hotkey)   # rebind to the new combo immediately
 
     # --------------------------------------------------------------- status
     def _set_state(self, emoji, status_text, start_title):
