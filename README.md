@@ -33,6 +33,7 @@ No accounts. No upload. The transcription runs **on your device**.
 | | |
 |---|---|
 | 🎙️ **Dictate anywhere** | Press **⌘⌥D**, speak, press again. It transcribes and types at your cursor in any app. |
+| ⌨️ **Your own shortcut** | One toggle starts/stops. Record a custom key combo right in the app — it rebinds instantly, no restart. |
 | 🌐 **English · Hindi · Hinglish** | True code-switching. Hindi comes out **romanized (Hinglish)** by default, or Devanagari — your choice. |
 | 🧠 **On-device** | Whisper `large-v3-turbo` runs locally on the Apple Silicon GPU. Private and offline. |
 | ⏸️ **Pause media while you speak** | Music / Spotify / video auto-pause when you start and resume after. |
@@ -119,9 +120,12 @@ reverse-engineering engine. (The hero above is a real Inspect run.)
 
 ## Design
 
-The interface follows an editorial, gallery-grade system — **Instrument Serif**
-display type over **Hanken Grotesk**, a bone-paper canvas, a single cool slate
-accent, and an 8-pt grid. Warm, calm, and unmistakably its own.
+A light, airy interface in the spirit of modern privacy-first products —
+**Newsreader** serif headlines over **Hanken Grotesk**, a near-white canvas,
+soft-rounded cards floating on diffuse shadows, fully-rounded pill controls, and
+a single lavender accent. Built to a disciplined system: two type families, four
+colours, an 8-pt grid. The dashboard is a native window (WKWebView) wired to the
+local engine, so what you see is live on-device state.
 
 ## License
 

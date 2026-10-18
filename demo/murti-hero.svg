@@ -1,58 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="940" height="600" viewBox="0 0 940 600" font-family="'Helvetica Neue',-apple-system,BlinkMacSystemFont,system-ui,sans-serif">
 <style>text{dominant-baseline:middle}@keyframes win{0%,1.67%{opacity:0}5.00%,100%{opacity:1}}@keyframes beam{0%,21.67%{opacity:0}25.00%,94%{opacity:1}100%{opacity:0}}@keyframes head{0%,28.33%{opacity:0}31.67%,100%{opacity:1}}@keyframes p1{0%,32.50%{opacity:0}35.83%,100%{opacity:1}}@keyframes p2{0%,35.83%{opacity:0}39.17%,100%{opacity:1}}@keyframes p3{0%,39.17%{opacity:0}42.50%,100%{opacity:1}}@keyframes flag{0%,42.50%{opacity:0}45.83%,100%{opacity:1}}@keyframes fh{0%,45.00%{opacity:0}48.33%,100%{opacity:1}}@keyframes c0{0%,47.50%{opacity:0}50.83%,100%{opacity:1}}@keyframes c1{0%,49.33%{opacity:0}52.67%,100%{opacity:1}}@keyframes c2{0%,51.17%{opacity:0}54.50%,100%{opacity:1}}@keyframes c3{0%,53.00%{opacity:0}56.33%,100%{opacity:1}}@keyframes c4{0%,54.83%{opacity:0}58.17%,100%{opacity:1}}@keyframes c5{0%,56.67%{opacity:0}60.00%,100%{opacity:1}}@keyframes c6{0%,58.50%{opacity:0}61.83%,100%{opacity:1}}@keyframes c7{0%,60.33%{opacity:0}63.67%,100%{opacity:1}}.win{opacity:1;animation:win 12.0s infinite}.head{opacity:1;animation:head 12.0s infinite}.flag{opacity:1;animation:flag 12.0s infinite}.fh{opacity:1;animation:fh 12.0s infinite}.p1{opacity:1;animation:p1 12.0s infinite}.p2{opacity:1;animation:p2 12.0s infinite}.p3{opacity:1;animation:p3 12.0s infinite}.c0{opacity:1;animation:c0 12.0s infinite}.c1{opacity:1;animation:c1 12.0s infinite}.c2{opacity:1;animation:c2 12.0s infinite}.c3{opacity:1;animation:c3 12.0s infinite}.c4{opacity:1;animation:c4 12.0s infinite}.c5{opacity:1;animation:c5 12.0s infinite}.c6{opacity:1;animation:c6 12.0s infinite}.c7{opacity:1;animation:c7 12.0s infinite}.beam{opacity:0;animation:beam 12.0s infinite,sweep 12.0s infinite}@keyframes sweep{0%,20%{transform:translateX(0)}32%{transform:translateX(430px)}40%,100%{transform:translateX(430px)}}.ring{transform-box:fill-box;transform-origin:center;animation:sonar 2s ease-out infinite}@keyframes sonar{0%{transform:scale(.6);opacity:.5}100%{transform:scale(1.6);opacity:0}}.bar{transform-box:fill-box;transform-origin:bottom;animation:wave 1.1s ease-in-out infinite}@keyframes wave{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}@keyframes q1{0%,3.33%{opacity:0}5.83%,22.50%{opacity:1}25.00%,100%{opacity:0}}@keyframes q2{0%,26.67%{opacity:0}29.17%,40.83%{opacity:1}43.33%,100%{opacity:0}}@keyframes q3{0%,45.00%{opacity:0}47.50%,94.17%{opacity:1}96.67%,100%{opacity:0}}.q1{opacity:0;animation:q1 12.0s infinite}.q2{opacity:0;animation:q2 12.0s infinite}.q3{opacity:0;animation:q3 12.0s infinite}</style>
-<rect width="940" height="600" rx="14" fill="#0e0d0c"/>
-<text x="470.0" y="34" fill="#efe9e0" font-size="19" font-weight="700" text-anchor="middle" letter-spacing="-0.5">Murti — see inside any app</text>
+<rect width="940" height="600" rx="14" fill="#f5f4f8"/>
+<text x="470.0" y="34" fill="#18171c" font-size="19" font-weight="700" text-anchor="middle" letter-spacing="-0.5">Murti — see inside any app</text>
 <g class="win">
-<rect x="40" y="70" width="380" height="414" rx="14" fill="#161413" stroke="#2a2622"/>
-<rect x="40" y="70" width="380" height="36" rx="14" fill="#1d1a18"/>
-<rect x="40" y="94" width="380" height="12" fill="#1d1a18"/>
-<circle cx="62" cy="88" r="5" fill="none" stroke="#746b5f" stroke-width="1.3"/>
-<circle cx="80" cy="88" r="5" fill="none" stroke="#746b5f" stroke-width="1.3"/>
-<circle cx="98" cy="88" r="5" fill="none" stroke="#746b5f" stroke-width="1.3"/>
-<text x="230.0" y="88" fill="#a69d8f" font-size="12.5" font-weight="600" text-anchor="middle">Example.app</text>
-<circle class="ring" style="animation-delay:0s" cx="230.0" cy="218" r="44" fill="none" stroke="#c08a5a" stroke-width="1.5"/>
-<circle class="ring" style="animation-delay:0.6s" cx="230.0" cy="218" r="44" fill="none" stroke="#c08a5a" stroke-width="1.5"/>
-<circle class="ring" style="animation-delay:1.2s" cx="230.0" cy="218" r="44" fill="none" stroke="#c08a5a" stroke-width="1.5"/>
-<circle cx="230.0" cy="218" r="44" fill="#c08a5a"/>
-<path d="M230.0 202 a7 7 0 0 1 7 7 v6 a7 7 0 0 1-14 0 v-6 a7 7 0 0 1 7-7z" fill="none" stroke="#0e0d0c" stroke-width="2"/>
-<path d="M219.0 219 a11 11 0 0 0 22 0 M230.0 230 v6" fill="none" stroke="#0e0d0c" stroke-width="2"/>
-<text x="230.0" y="292" fill="#efe9e0" font-size="15" font-weight="600" text-anchor="middle">Recording…</text>
-<rect class="bar" style="animation-delay:0.00s" x="86" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.12s" x="104" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<rect class="bar" style="animation-delay:0.24s" x="122" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.36s" x="140" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<rect class="bar" style="animation-delay:0.48s" x="158" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.60s" x="176" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<rect class="bar" style="animation-delay:0.00s" x="194" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.12s" x="212" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<rect class="bar" style="animation-delay:0.24s" x="230" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.36s" x="248" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<rect class="bar" style="animation-delay:0.48s" x="266" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.60s" x="284" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<rect class="bar" style="animation-delay:0.00s" x="302" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.12s" x="320" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<rect class="bar" style="animation-delay:0.24s" x="338" y="342" width="8" height="58" rx="3" fill="#a69d8f"/>
-<rect class="bar" style="animation-delay:0.36s" x="356" y="342" width="8" height="58" rx="3" fill="#efe9e0"/>
-<text x="230.0" y="460" fill="#746b5f" font-size="12" text-anchor="middle">what the user sees</text>
+<rect x="40" y="70" width="380" height="414" rx="14" fill="#ffffff" stroke="#e6e4ef"/>
+<rect x="40" y="70" width="380" height="36" rx="14" fill="#f1eff8"/>
+<rect x="40" y="94" width="380" height="12" fill="#f1eff8"/>
+<circle cx="62" cy="88" r="5" fill="none" stroke="#a3a1ad" stroke-width="1.3"/>
+<circle cx="80" cy="88" r="5" fill="none" stroke="#a3a1ad" stroke-width="1.3"/>
+<circle cx="98" cy="88" r="5" fill="none" stroke="#a3a1ad" stroke-width="1.3"/>
+<text x="230.0" y="88" fill="#6e6c78" font-size="12.5" font-weight="600" text-anchor="middle">Example.app</text>
+<circle class="ring" style="animation-delay:0s" cx="230.0" cy="218" r="44" fill="none" stroke="#8b7cf5" stroke-width="1.5"/>
+<circle class="ring" style="animation-delay:0.6s" cx="230.0" cy="218" r="44" fill="none" stroke="#8b7cf5" stroke-width="1.5"/>
+<circle class="ring" style="animation-delay:1.2s" cx="230.0" cy="218" r="44" fill="none" stroke="#8b7cf5" stroke-width="1.5"/>
+<circle cx="230.0" cy="218" r="44" fill="#8b7cf5"/>
+<path d="M230.0 202 a7 7 0 0 1 7 7 v6 a7 7 0 0 1-14 0 v-6 a7 7 0 0 1 7-7z" fill="none" stroke="#ffffff" stroke-width="2"/>
+<path d="M219.0 219 a11 11 0 0 0 22 0 M230.0 230 v6" fill="none" stroke="#ffffff" stroke-width="2"/>
+<text x="230.0" y="292" fill="#18171c" font-size="15" font-weight="600" text-anchor="middle">Recording…</text>
+<rect class="bar" style="animation-delay:0.00s" x="86" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.12s" x="104" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<rect class="bar" style="animation-delay:0.24s" x="122" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.36s" x="140" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<rect class="bar" style="animation-delay:0.48s" x="158" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.60s" x="176" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<rect class="bar" style="animation-delay:0.00s" x="194" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.12s" x="212" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<rect class="bar" style="animation-delay:0.24s" x="230" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.36s" x="248" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<rect class="bar" style="animation-delay:0.48s" x="266" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.60s" x="284" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<rect class="bar" style="animation-delay:0.00s" x="302" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.12s" x="320" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<rect class="bar" style="animation-delay:0.24s" x="338" y="342" width="8" height="58" rx="3" fill="#6e6c78"/>
+<rect class="bar" style="animation-delay:0.36s" x="356" y="342" width="8" height="58" rx="3" fill="#18171c"/>
+<text x="230.0" y="460" fill="#a3a1ad" font-size="12" text-anchor="middle">what the user sees</text>
 </g>
-<g class="beam"><rect x="228.0" y="60" width="4" height="434" rx="2" fill="#c08a5a" opacity="0.9"/><rect x="218.0" y="60" width="24" height="434" fill="#c08a5a" opacity="0.12"/></g>
-<text class="head" x="480" y="80" fill="#efe9e0" font-size="13" font-weight="700" letter-spacing="1">WHAT’S ACTUALLY INSIDE</text>
-<g class="p1"><rect x="480" y="94" width="420" height="44" rx="10" fill="#161413" stroke="#2a2622" stroke-width="1"/><text x="496" y="111.6" fill="#efe9e0" font-size="14.5" font-weight="600">Microphone  →  Opus encoder</text><text x="496" y="126.12" fill="#a69d8f" font-size="11.5">AudioWorklet · WASM workers</text></g>
-<text class="p2" x="690.0" y="150" fill="#746b5f" font-size="15" text-anchor="middle">↓</text>
-<g class="p2"><rect x="480" y="160" width="420" height="44" rx="10" fill="#161413" stroke="#2a2622" stroke-width="1"/><text x="496" y="177.6" fill="#efe9e0" font-size="14.5" font-weight="600">gRPC stream</text><text x="496" y="192.12" fill="#a69d8f" font-size="11.5">@grpc/grpc-js</text></g>
-<text class="p3" x="690.0" y="216" fill="#746b5f" font-size="15" text-anchor="middle">↓</text>
-<g class="p3"><rect x="480" y="226" width="420" height="46" rx="10" fill="#161413" stroke="#c08a5a" stroke-width="1.6"/><text x="496" y="244.4" fill="#c08a5a" font-size="14.5" font-weight="600">Cloud transcription</text><text x="496" y="259.58" fill="#a69d8f" font-size="11.5">not on your device</text></g>
-<text class="flag" x="480" y="292" fill="#a69d8f" font-size="12">⚑ no on-device speech model found in the binary</text>
-<text class="fh" x="480" y="322" fill="#efe9e0" font-size="13" font-weight="700" letter-spacing="1">FEATURES FOUND</text>
-<g class="c0"><rect x="480" y="334" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="496" cy="351" r="3" fill="#efe9e0"/><text x="508" y="351" fill="#efe9e0" font-size="12.5" font-weight="500">Meeting notetaker · Zoom</text></g>
-<g class="c1"><rect x="696" y="334" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="712" cy="351" r="3" fill="#efe9e0"/><text x="724" y="351" fill="#efe9e0" font-size="12.5" font-weight="500">Cloud sync</text></g>
-<g class="c2"><rect x="480" y="376" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="496" cy="393" r="3" fill="#efe9e0"/><text x="508" y="393" fill="#efe9e0" font-size="12.5" font-weight="500">Accounts &amp; team</text></g>
-<g class="c3"><rect x="696" y="376" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="712" cy="393" r="3" fill="#efe9e0"/><text x="724" y="393" fill="#efe9e0" font-size="12.5" font-weight="500">Billing</text></g>
-<g class="c4"><rect x="480" y="418" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="496" cy="435" r="3" fill="#efe9e0"/><text x="508" y="435" fill="#efe9e0" font-size="12.5" font-weight="500">Voice profile</text></g>
-<g class="c5"><rect x="696" y="418" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="712" cy="435" r="3" fill="#efe9e0"/><text x="724" y="435" fill="#efe9e0" font-size="12.5" font-weight="500">Headset ring support</text></g>
-<g class="c6"><rect x="480" y="460" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="496" cy="477" r="3" fill="#efe9e0"/><text x="508" y="477" fill="#efe9e0" font-size="12.5" font-weight="500">Pause media</text></g>
-<g class="c7"><rect x="696" y="460" width="204" height="34" rx="8" fill="#1d1a18" stroke="#2a2622"/><circle cx="712" cy="477" r="3" fill="#efe9e0"/><text x="724" y="477" fill="#efe9e0" font-size="12.5" font-weight="500">Auto-learn dictionary</text></g>
-<text class="q1" x="470.0" y="566" fill="#efe9e0" font-size="15.5" font-weight="600" text-anchor="middle">This is the app you use.</text>
-<text class="q2" x="470.0" y="566" fill="#efe9e0" font-size="15.5" font-weight="600" text-anchor="middle">Teardown x-rays the shipped binary…</text>
-<text class="q3" x="470.0" y="566" fill="#efe9e0" font-size="15.5" font-weight="600" text-anchor="middle">…and reveals everything inside. No source code.</text>
+<g class="beam"><rect x="228.0" y="60" width="4" height="434" rx="2" fill="#8b7cf5" opacity="0.9"/><rect x="218.0" y="60" width="24" height="434" fill="#8b7cf5" opacity="0.12"/></g>
+<text class="head" x="480" y="80" fill="#18171c" font-size="13" font-weight="700" letter-spacing="1">WHAT’S ACTUALLY INSIDE</text>
+<g class="p1"><rect x="480" y="94" width="420" height="44" rx="10" fill="#ffffff" stroke="#e6e4ef" stroke-width="1"/><text x="496" y="111.6" fill="#18171c" font-size="14.5" font-weight="600">Microphone  →  Opus encoder</text><text x="496" y="126.12" fill="#6e6c78" font-size="11.5">AudioWorklet · WASM workers</text></g>
+<text class="p2" x="690.0" y="150" fill="#a3a1ad" font-size="15" text-anchor="middle">↓</text>
+<g class="p2"><rect x="480" y="160" width="420" height="44" rx="10" fill="#ffffff" stroke="#e6e4ef" stroke-width="1"/><text x="496" y="177.6" fill="#18171c" font-size="14.5" font-weight="600">gRPC stream</text><text x="496" y="192.12" fill="#6e6c78" font-size="11.5">@grpc/grpc-js</text></g>
+<text class="p3" x="690.0" y="216" fill="#a3a1ad" font-size="15" text-anchor="middle">↓</text>
+<g class="p3"><rect x="480" y="226" width="420" height="46" rx="10" fill="#ffffff" stroke="#8b7cf5" stroke-width="1.6"/><text x="496" y="244.4" fill="#8b7cf5" font-size="14.5" font-weight="600">Cloud transcription</text><text x="496" y="259.58" fill="#6e6c78" font-size="11.5">not on your device</text></g>
+<text class="flag" x="480" y="292" fill="#6e6c78" font-size="12">⚑ no on-device speech model found in the binary</text>
+<text class="fh" x="480" y="322" fill="#18171c" font-size="13" font-weight="700" letter-spacing="1">FEATURES FOUND</text>
+<g class="c0"><rect x="480" y="334" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="496" cy="351" r="3" fill="#18171c"/><text x="508" y="351" fill="#18171c" font-size="12.5" font-weight="500">Meeting notetaker · Zoom</text></g>
+<g class="c1"><rect x="696" y="334" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="712" cy="351" r="3" fill="#18171c"/><text x="724" y="351" fill="#18171c" font-size="12.5" font-weight="500">Cloud sync</text></g>
+<g class="c2"><rect x="480" y="376" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="496" cy="393" r="3" fill="#18171c"/><text x="508" y="393" fill="#18171c" font-size="12.5" font-weight="500">Accounts &amp; team</text></g>
+<g class="c3"><rect x="696" y="376" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="712" cy="393" r="3" fill="#18171c"/><text x="724" y="393" fill="#18171c" font-size="12.5" font-weight="500">Billing</text></g>
+<g class="c4"><rect x="480" y="418" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="496" cy="435" r="3" fill="#18171c"/><text x="508" y="435" fill="#18171c" font-size="12.5" font-weight="500">Voice profile</text></g>
+<g class="c5"><rect x="696" y="418" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="712" cy="435" r="3" fill="#18171c"/><text x="724" y="435" fill="#18171c" font-size="12.5" font-weight="500">Headset ring support</text></g>
+<g class="c6"><rect x="480" y="460" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="496" cy="477" r="3" fill="#18171c"/><text x="508" y="477" fill="#18171c" font-size="12.5" font-weight="500">Pause media</text></g>
+<g class="c7"><rect x="696" y="460" width="204" height="34" rx="8" fill="#f1eff8" stroke="#e6e4ef"/><circle cx="712" cy="477" r="3" fill="#18171c"/><text x="724" y="477" fill="#18171c" font-size="12.5" font-weight="500">Auto-learn dictionary</text></g>
+<text class="q1" x="470.0" y="566" fill="#18171c" font-size="15.5" font-weight="600" text-anchor="middle">This is the app you use.</text>
+<text class="q2" x="470.0" y="566" fill="#18171c" font-size="15.5" font-weight="600" text-anchor="middle">Teardown x-rays the shipped binary…</text>
+<text class="q3" x="470.0" y="566" fill="#18171c" font-size="15.5" font-weight="600" text-anchor="middle">…and reveals everything inside. No source code.</text>
 </svg>

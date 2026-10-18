@@ -11,10 +11,11 @@ Regenerate with:  python3 demo/make_hero_svg.py
 from pathlib import Path
 
 # ---- Murti palette (warm editorial dark + bronze accent) ------------------- #
-BG, CARD, CARD2 = "#0e0d0c", "#161413", "#1d1a18"
-FG, DIM, DIM2 = "#efe9e0", "#a69d8f", "#746b5f"
-LINE = "#2a2622"
-WHITE = "#c08a5a"   # bronze accent (reused wherever the mark needs emphasis)
+BG, CARD, CARD2 = "#f5f4f8", "#ffffff", "#f1eff8"
+FG, DIM, DIM2 = "#18171c", "#6e6c78", "#a3a1ad"
+LINE = "#e6e4ef"
+WHITE = "#8b7cf5"       # lavender accent (reused wherever the mark needs emphasis)
+ON_ACCENT = "#ffffff"   # content drawn on top of the accent circle (mic glyph)
 W, H, CYCLE = 940, 600, 12.0
 FONT = "'Helvetica Neue',-apple-system,BlinkMacSystemFont,system-ui,sans-serif"
 
@@ -115,9 +116,9 @@ def build():
                  f'r="44" fill="none" stroke="{WHITE}" stroke-width="1.5"/>')
     P.append(f'<circle cx="{cx}" cy="{cy}" r="44" fill="{WHITE}"/>')
     P.append(f'<path d="M{cx} {cy-16} a7 7 0 0 1 7 7 v6 a7 7 0 0 1-14 0 v-6 a7 7 0 0 1 7-7z" '
-             f'fill="none" stroke="{BG}" stroke-width="2"/>')
+             f'fill="none" stroke="{ON_ACCENT}" stroke-width="2"/>')
     P.append(f'<path d="M{cx-11} {cy+1} a11 11 0 0 0 22 0 M{cx} {cy+12} v6" '
-             f'fill="none" stroke="{BG}" stroke-width="2"/>')
+             f'fill="none" stroke="{ON_ACCENT}" stroke-width="2"/>')
     P.append(f'<text x="{cx}" y="{cy+74}" fill="{FG}" font-size="15" font-weight="600" '
              f'text-anchor="middle">Recording…</text>')
     bx, bbot, bw, gap, n = wx + 46, wy + 330, 8, 18, 16
