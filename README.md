@@ -53,24 +53,18 @@ No accounts. No upload. The transcription runs **on your device**.
 
 ## How it works
 
-```mermaid
-flowchart TD
-  subgraph device["🖥  Your Mac — everything in this box runs on-device"]
-    direction LR
-    MIC["🎙 Microphone"] --> REC["Recorder<br/>16 kHz mono"]
-    HOT["⌘⌥D toggle"] -.->|start / stop| REC
-    REC -->|audio, live while you speak| STR["Streaming transcriber<br/>commits finished words at pauses<br/>so only the tail waits at stop"]
-    STR --> W["Whisper large-v3-turbo<br/>MLX · Apple Silicon GPU<br/>preloaded at launch"]
-    W --> SHAPE["Shape the text<br/>punctuation · romanize Hindi<br/>translate · personal dictionary"]
-    SHAPE --> INS["Inserter<br/>clipboard + synthesized ⌘V"]
-    INS --> CUR["➜ your cursor, in any app"]
-    STORE[("~/.config/murti<br/>settings · dictionary · insights")]
-    SHAPE <--> STORE
-    DASH["Dashboard<br/>127.0.0.1 · WKWebView"] <--> STORE
-  end
-  SHAPE -.->|optional · only with an API key| CLAUDE["Claude online<br/>polish romanize / translate"]
-  INSPECT["🔎 Inspect · REA engine<br/>reads a shipped binary →<br/>architecture report"] -.->|studio tool| DASH
-```
+<div align="center">
+
+<img src="docs/murti-architecture.gif" alt="Murti architecture — your voice flows from the microphone through the recorder, streaming transcriber, Whisper, text shaping and inserter to your cursor, entirely on-device; only an optional, key-gated Claude call can leave the Mac." width="100%">
+
+<sub><b><a href="https://technomad641.github.io/murti/architecture.html">▶ Open the live, interactive diagram →</a></b> — hover edges, trace routes, toggle light/dark</sub>
+
+</div>
+
+Everything inside the box runs **on your Mac**. Your voice goes from the
+microphone through the recorder, streaming transcriber, Whisper, text shaping and
+inserter to your cursor — and the only thing that can ever leave the machine is an
+**optional, key-gated** polish call to Claude.
 
 Two things keep it fast: the model is **preloaded at launch** (no cold start on
 your first dictation), and audio is **transcribed as you speak** — finished words

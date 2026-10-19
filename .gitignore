@@ -13,3 +13,6 @@ demo/transcripts.json
 demo/report.html
 demo/*.wav
 demo/*.log
+
+# archify build scratch
+.archify/
